@@ -1,14 +1,64 @@
 ﻿<?xml version = "1.0" encoding = "UTF-8" ?>
-<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:Arkana"
-             x:Class="Arkana.App">
-    <Application.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
-                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
-</Application>
+<Shell
+    x:Class="Arkana.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Arkana"
+    xmlns:pages="clr-namespace:Arkana.Pages"
+    xmlns:info="clr-namespace:Microsoft.Maui.ApplicationModel;assembly=Microsoft.Maui.Essentials"
+    Title="Arkana"
+    Shell.FlyoutBehavior="Flyout"
+    Shell.FlyoutBackgroundColor="{StaticResource ArkanaCard}"
+    Shell.BackgroundColor="{StaticResource ArkanaBg}"
+    Shell.ForegroundColor="White"
+    Shell.TitleColor="White"
+    Shell.TabBarBackgroundColor="{StaticResource ArkanaBg}"
+    Shell.TabBarTitleColor="{StaticResource ArkanaRed}"
+    Shell.TabBarUnselectedColor="{StaticResource ArkanaMuted}">
+    
+    <!--MENU LATERAL-->
+    
+    <Shell.FlyoutHeader>
+        <Grid Padding="22,45,22,22" BackgroundColor="{StaticResource ArcanaBg}">
+            <Label FontSize="32" FontAttributes="Bold">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Ark" TextColor="White"/>
+                        <Span Text=".ana" TextColor="{StaticResource ArkanaRed}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <Shell.FlyoutFooter>
+        <VerticalStackLayout Padding="22,15">
+            <Label Text ="{x:Static info:AppInfo.Name}" TextColor="{StaticResource ArkanaMuted}"/>
+            <Label Text="{x:Static info:AppInfo.VersionString}" TextColor="{StaticResource ArkanaMuted}"/>
+        </VerticalStackLayout>
+   </Shell.FlyoutFooter>
+
+    <Shell.MenuItemTemplate>
+        <DataTemplate>
+            <Grid Padding="22,14">
+                <Label Text="{Binding Text}" TextColor="White" FontSize="16" VerticalOptions="Center"/>
+            </Grid>
+        </DataTemplate>
+    </Shell.MenuItemTemplate>
+
+    <TabBar Route="main">
+
+        <ShellContent
+            Title="Inicio" ContentTemplate="{DataTemplate pages:HomePage}"/>
+        <ShellContent
+            Title="Explorar" ContentTemplate="{DataTemplate pages:SearchPage}"/>
+        <ShellContent
+            Title="Perfil" ContentTemplate="{DataTemplate pages:UserProfilePage}"/>
+
+    </TabBar>
+    
+    <MenuItem Text="Acerca De Arcana" Clicked="About_clicked"/>
+    <MenuItem Text="Documentacion" Clicked="Docs_clicked"/>
+    <MenuItem Text="Cerrar Sesion" Clicked="Logout_clicked"/>
+    
+</Shell>
