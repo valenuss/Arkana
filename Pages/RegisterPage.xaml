@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Arkana.Pages.RegisterPage"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#0A0A0F">
+
+    <!-- estilos para no repetir en cada campo -->
+    <ContentPage.Resources>
+        <Style x:Key="FieldBox" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#14141A"/>
+            <Setter Property="Stroke" Value="#2A2A33"/>
+            <Setter Property="StrokeThickness" Value="1"/>
+            <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+            <Setter Property="Padding" Value="14,0"/>
+        </Style>
+        <Style x:Key="FieldEntry" TargetType="Entry">
+            <Setter Property="PlaceholderColor" Value="#6B6B76"/>
+            <Setter Property="TextColor" Value="White"/>
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="HeightRequest" Value="50"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="14" VerticalOptions="Center">
+
+            <!-- logo -->
+            <Label HorizontalOptions="Center" FontSize="38" FontAttributes="Bold">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Ark" TextColor="White"/>
+                        <Span Text="ana" TextColor="#FF1F3D"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+            <Label Text="Crear cuenta" FontSize="22" FontAttributes="Bold"
+                   TextColor="White" HorizontalOptions="Center" Margin="0,15,0,0"/>
+            <Label Text="Únete a Arkana" FontSize="14" TextColor="#9A9AA5"
+                   HorizontalOptions="Center" Margin="0,0,0,10"/>
+
+            <!-- nombre -->
+            <Border Style="{StaticResource FieldBox}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Text="👤" FontSize="18" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" x:Name="NameEntry" Placeholder="Nombre"
+                           Style="{StaticResource FieldEntry}"/>
+                </Grid>
+            </Border>
+
+            <!-- usuario -->
+            <Border Style="{StaticResource FieldBox}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Text="🏷️" FontSize="18" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" x:Name="UsernameEntry" Placeholder="Nombre de usuario"
+                           Style="{StaticResource FieldEntry}"/>
+                </Grid>
+            </Border>
+
+            <!-- correo -->
+            <Border Style="{StaticResource FieldBox}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Text="📧" FontSize="18" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" x:Name="EmailEntry" Placeholder="Correo electrónico"
+                           Keyboard="Email" Style="{StaticResource FieldEntry}"/>
+                </Grid>
+            </Border>
+
+            <!-- contraseña -->
+            <Border Style="{StaticResource FieldBox}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Text="🔒" FontSize="18" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" x:Name="PasswordEntry" Placeholder="Contraseña"
+                           IsPassword="True" Style="{StaticResource FieldEntry}"/>
+                </Grid>
+            </Border>
+
+            <!-- confirmar -->
+            <Border Style="{StaticResource FieldBox}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Text="🔑" FontSize="18" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" x:Name="ConfirmPasswordEntry" Placeholder="Confirmar contraseña"
+                           IsPassword="True" Style="{StaticResource FieldEntry}"/>
+                </Grid>
+            </Border>
+
+            <!-- boton -->
+            <Button Text="Crear cuenta"
+                    Clicked="RegisterButton_Clicked"
+                    BackgroundColor="#FF1F3D"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    HeightRequest="50" CornerRadius="25"
+                    Margin="0,8,0,0"/>
+
+            <!-- volver al login -->
+            <Label HorizontalOptions="Center" FontSize="13" Margin="0,15,0,0">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="¿Ya tienes cuenta? " TextColor="#9A9AA5"/>
+                        <Span Text="Inicia sesión" TextColor="#FF1F3D" FontAttributes="Bold"/>
+                    </FormattedString>
+                </Label.FormattedText>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Login_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Arkana.Pages.LoginPage"
+    BackgroundColor="#0A0A0F">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="16" VerticalOptions="Center">
+
+            <!-- logo -->
+            <Label HorizontalOptions="Center" FontSize="38" FontAttributes="Bold" Margin="0,0,0,30">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Ark" TextColor="White"/>
+                        <Span Text="ana" TextColor="#FF1F3D"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+            <Label Text="Bienvenido de nuevo" FontSize="22" FontAttributes="Bold"
+                   TextColor="White" HorizontalOptions="Center"/>
+            <Label Text="Inicia sesión para continuar" FontSize="14" TextColor="#9A9AA5"
+                   HorizontalOptions="Center" Margin="0,0,0,15"/>
+
+
+            <!-- correo o usuario -->
+            <Border BackgroundColor="#14141A" Stroke="#2A2A33" StrokeThickness="1"
+                    StrokeShape="RoundRectangle 12" Padding="14,0">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                    <Label Text="👤" FontSize="18" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" x:Name="EmailEntry"
+                           Placeholder="Correo electrónico o usuario"
+                           PlaceholderColor="#6B6B76"
+                           TextColor="White" BackgroundColor="Transparent"
+                           HeightRequest="50"/>
+                </Grid>
+            </Border>
+
+            <!-- contraseña con ojito -->
+            <Border BackgroundColor="#14141A" Stroke="#2A2A33" StrokeThickness="1"
+                    StrokeShape="RoundRectangle 12" Padding="14,0">
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                    <Label Text="🔒" FontSize="18" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" x:Name="PasswordEntry"
+                           Placeholder="Contraseña"
+                           PlaceholderColor="#6B6B76"
+                           TextColor="White" BackgroundColor="Transparent"
+                           HeightRequest="50" IsPassword="True"/>
+                    <Label Grid.Column="2" Text="👁" FontSize="18" VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ShowPassword_Tapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+            </Border>
+
+            <!-- recordarme y olvidaste -->
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <CheckBox Color="#FF1F3D" VerticalOptions="Center"/>
+                <Label Grid.Column="1" Text="Recordarme" TextColor="#9A9AA5"
+                       FontSize="12" VerticalOptions="Center"/>
+                <Label Grid.Column="2" Text="¿Olvidaste tu contraseña?" TextColor="#9A9AA5"
+                       FontSize="12" VerticalOptions="Center"/>
+            </Grid>
+
+            <!-- boton -->
+            <Button Text="Iniciar sesión"
+                    Clicked="LoginButton_Clicked"
+                    BackgroundColor="#FF1F3D"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    HeightRequest="50" CornerRadius="25"
+                    Margin="0,5,0,0"/>
+
+            <!-- separador -->
+            <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10" Margin="0,5">
+                <BoxView Color="#2A2A33" HeightRequest="1" VerticalOptions="Center"/>
+                <Label Grid.Column="1" Text="o" TextColor="#9A9AA5" FontSize="12"/>
+                <BoxView Grid.Column="2" Color="#2A2A33" HeightRequest="1" VerticalOptions="Center"/>
+            </Grid>
+
+            <!-- google, solo de adorno por ahora -->
+            <Border BackgroundColor="Transparent" Stroke="#3A3A44" StrokeThickness="1"
+                    StrokeShape="RoundRectangle 25" HeightRequest="50">
+                <Label Text="G   Continuar con Google" TextColor="White" FontAttributes="Bold"
+                       HorizontalOptions="Center" VerticalOptions="Center"/>
+            </Border>
+
+            <!-- registro -->
+            <Label HorizontalOptions="Center" FontSize="13" Margin="0,20,0,0">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="¿No tienes cuenta? " TextColor="#9A9AA5"/>
+                        <Span Text="Regístrate" TextColor="#FF1F3D" FontAttributes="Bold"/>
+                    </FormattedString>
+                </Label.FormattedText>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Register_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

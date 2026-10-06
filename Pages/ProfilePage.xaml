@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Arkana.Pages.ProfilePage"
+    Title="Mi perfil"
+    BackgroundColor="#0D0D0D">
+
+    <VerticalStackLayout Padding="30" Spacing="10">
+
+        <Border StrokeShape="RoundRectangle 50" Stroke="#F43F5E" StrokeThickness="3"
+                WidthRequest="100" HeightRequest="100" BackgroundColor="#2A1A3D"
+                HorizontalOptions="Center" Margin="0,20,0,0">
+            <Label Text="👤" FontSize="50" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Border>
+
+        <Label x:Name="NameLabel" Text="Nombre" FontSize="24" FontAttributes="Bold"
+               TextColor="White" HorizontalOptions="Center"/>
+        <Label x:Name="UsernameLabel" Text="@usuario" FontSize="14"
+               TextColor="#A855F7" HorizontalOptions="Center"/>
+
+        <!-- numeros -->
+        <Grid ColumnDefinitions="*,*,*" Margin="0,20,0,0">
+
+            <VerticalStackLayout Grid.Column="0">
+                <Label x:Name="PostsLabel" Text="0" FontSize="20" FontAttributes="Bold"
+                       TextColor="White" HorizontalOptions="Center"/>
+                <Label Text="Publicaciones" FontSize="12" TextColor="#888888" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="1">
+                <Label x:Name="FollowersLabel" Text="0" FontSize="20" FontAttributes="Bold"
+                       TextColor="White" HorizontalOptions="Center"/>
+                <Label Text="Seguidores" FontSize="12" TextColor="#888888" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="2">
+                <Label x:Name="FollowingLabel" Text="0" FontSize="20" FontAttributes="Bold"
+                       TextColor="White" HorizontalOptions="Center"/>
+                <Label Text="Siguiendo" FontSize="12" TextColor="#888888" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+        </Grid>
+
+    </VerticalStackLayout>
+
+</ContentPage>

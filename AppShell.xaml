@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Arkana.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Arkana"
+    xmlns:pages="clr-namespace:Arkana.Pages"
+    Title="Arkana"
+    FlyoutBehavior="Disabled"
+    BackgroundColor="#0A0A0F"
+    TabBarBackgroundColor="#0A0A0F"
+    TabBarTitleColor="#FF1F3D"
+    TabBarUnselectedColor="#8A8A94">
+
+    <!-- pantalla de login -->
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate pages:LoginPage}"
+        Route="login"
+        Shell.NavBarIsVisible="False"/>
+
+    <!-- barra de abajo, aparece cuando ya iniciaste sesion -->
+    <TabBar Route="main">
+
+        <ShellContent
+            Title="🏠 Inicio"
+            ContentTemplate="{DataTemplate pages:HomePage}"
+            Shell.NavBarIsVisible="False"/>
+
+        <ShellContent
+            Title="🔍 Buscar"
+            ContentTemplate="{DataTemplate pages:SearchPage}"/>
+
+        <ShellContent
+            Title="👤 Perfil"
+            ContentTemplate="{DataTemplate pages:ProfilePage}"/>
+
+    </TabBar>
+
+</Shell>

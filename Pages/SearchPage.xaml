@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Arkana.Pages.SearchPage"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#0A0A0F">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="18,12">
+
+        <!-- titulo -->
+        <Label Grid.Row="0" Text="Explorar usuarios" FontSize="22" FontAttributes="Bold"
+               TextColor="White" Margin="0,5,0,15"/>
+
+        <!-- buscador -->
+        <Border Grid.Row="1" BackgroundColor="#14141A" Stroke="#2A2A33" StrokeThickness="1"
+                StrokeShape="RoundRectangle 12" Padding="14,0">
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                <Label Text="🔍" FontSize="16" VerticalOptions="Center"/>
+                <Entry Grid.Column="1" x:Name="SearchEntry"
+                       Placeholder="Buscar usuarios..."
+                       PlaceholderColor="#6B6B76"
+                       TextColor="White" BackgroundColor="Transparent"
+                       HeightRequest="48"
+                       Text="{Binding Query, Mode=TwoWay}"/>
+            </Grid>
+        </Border>
+
+        <!-- filtros -->
+        <HorizontalStackLayout Grid.Row="2" Spacing="10" Margin="0,14">
+
+            <Border x:Name="ChipAll" StrokeShape="RoundRectangle 18" Stroke="#2A2A33" StrokeThickness="1"
+                    BackgroundColor="#FF1F3D" Padding="18,8">
+                <Label x:Name="ChipAllLabel" Text="Todos" TextColor="White" FontSize="13" FontAttributes="Bold"/>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Chip_Tapped" CommandParameter="Todos"/>
+                </Border.GestureRecognizers>
+            </Border>
+
+            <Border x:Name="ChipFollowing" StrokeShape="RoundRectangle 18" Stroke="#2A2A33" StrokeThickness="1"
+                    BackgroundColor="#14141A" Padding="18,8">
+                <Label x:Name="ChipFollowingLabel" Text="Siguiendo" TextColor="#9A9AA5" FontSize="13" FontAttributes="Bold"/>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Chip_Tapped" CommandParameter="Siguiendo"/>
+                </Border.GestureRecognizers>
+            </Border>
+
+            <Border x:Name="ChipSuggested" StrokeShape="RoundRectangle 18" Stroke="#2A2A33" StrokeThickness="1"
+                    BackgroundColor="#14141A" Padding="18,8">
+                <Label x:Name="ChipSuggestedLabel" Text="Sugeridos" TextColor="#9A9AA5" FontSize="13" FontAttributes="Bold"/>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Chip_Tapped" CommandParameter="Sugeridos"/>
+                </Border.GestureRecognizers>
+            </Border>
+
+        </HorizontalStackLayout>
+
+        <!-- lista de usuarios -->
+        <CollectionView Grid.Row="3" x:Name="UsersList"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
+                        ItemsSource="{Binding Users, Mode=OneWay}">
+
+            <CollectionView.EmptyView>
+                <Label Text="No se encontraron usuarios" TextColor="#9A9AA5" FontSize="14"
+                       HorizontalOptions="Center" Margin="0,40"/>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" Padding="0,10">
+
+                        <Border StrokeShape="RoundRectangle 24" Stroke="#FF1F3D" StrokeThickness="2"
+                                WidthRequest="48" HeightRequest="48" BackgroundColor="#1F1F28">
+                            <Label Text="{Binding Initial}" FontSize="18" FontAttributes="Bold"
+                                   TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                            <Label Text="{Binding Name}" TextColor="White" FontAttributes="Bold" FontSize="15"/>
+                            <Label Text="{Binding Handle}" TextColor="#9A9AA5" FontSize="12"/>
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="2"
+                                Text="{Binding ButtonText}"
+                                BackgroundColor="{Binding ButtonColor}"
+                                TextColor="{Binding ButtonTextColor}"
+                                BorderColor="#FF1F3D" BorderWidth="1"
+                                FontSize="13" CornerRadius="8"
+                                HeightRequest="36" Padding="16,0"
+                                VerticalOptions="Center"
+                                Clicked="Follow_Clicked"/>
+
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>
