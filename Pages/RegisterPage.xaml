@@ -23,9 +23,6 @@
         </Style>
     </ContentPage.Resources>
 
-    <ScrollView>
-        <VerticalStackLayout Padding="30" Spacing="14" VerticalOptions="Center">
-
             <!-- logo -->
             <Label HorizontalOptions="Center" FontSize="38" FontAttributes="Bold">
                 <Label.FormattedText>
@@ -107,8 +104,5 @@
                     <TapGestureRecognizer Tapped="Login_Tapped"/>
                 </Label.GestureRecognizers>
             </Label>
-
-        </VerticalStackLayout>
-    </ScrollView>
 
 </ContentPage>

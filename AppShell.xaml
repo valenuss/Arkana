@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version = "1.0" encoding = "UTF-8" ?>
 <Shell
     x:Class="Arkana.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -6,34 +6,27 @@
     xmlns:local="clr-namespace:Arkana"
     xmlns:pages="clr-namespace:Arkana.Pages"
     Title="Arkana"
-    FlyoutBehavior="Disabled"
-    BackgroundColor="#0A0A0F"
-    TabBarBackgroundColor="#0A0A0F"
-    TabBarTitleColor="#FF1F3D"
-    TabBarUnselectedColor="#8A8A94">
+    Shell.FlyoutBehavior="Flyout"
+    Shell.FlyoutBackgroundColor="{StaticResource ArkanaCard}"
+    Shell.BackgroundColor="{StaticResource ArkanaBg}"
+    Shell.ForegroundColor="White"
+    Shell.TitleColor="White"
 
-    <!-- pantalla de login -->
-    <ShellContent
-        Title="Login"
-        ContentTemplate="{DataTemplate pages:LoginPage}"
-        Route="login"
-        Shell.NavBarIsVisible="False"/>
+    <Shell.MenuItemTemplate>
+        <DataTemplate>
+            <Grid Padding="22,14">
+                <Label Text="{Binding Text}" TextColor="White" FontSize="16" VerticalOptions="Center"/>
+            </Grid>
+        </DataTemplate>
 
-    <!-- barra de abajo, aparece cuando ya iniciaste sesion -->
     <TabBar Route="main">
 
         <ShellContent
-            Title="🏠 Inicio"
-            ContentTemplate="{DataTemplate pages:HomePage}"
-            Shell.NavBarIsVisible="False"/>
-
+            Title="Inicio" ContentTemplate="{DataTemplate pages:HomePage}"/>
         <ShellContent
-            Title="🔍 Buscar"
-            ContentTemplate="{DataTemplate pages:SearchPage}"/>
-
+            Title="Explorar" ContentTemplate="{DataTemplate pages:SearchPage}"/>
         <ShellContent
-            Title="👤 Perfil"
-            ContentTemplate="{DataTemplate pages:ProfilePage}"/>
+            Title="Perfil" ContentTemplate="{DataTemplate pages:UserProfilePage}"/>
 
     </TabBar>
 
