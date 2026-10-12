@@ -5,12 +5,36 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:Arkana"
     xmlns:pages="clr-namespace:Arkana.Pages"
+    xmlns:info="clr-namespace:Microsoft.Maui.ApplicationModel;assembly=Microsoft.Maui.Essentials"
     Title="Arkana"
-    Shell.FlyoutBehavior="Flyout"
-    Shell.FlyoutBackgroundColor="{StaticResource ArkanaCard}"
-    Shell.BackgroundColor="{StaticResource ArkanaBg}"
-    Shell.ForegroundColor="White"
-    Shell.TitleColor="White"
+    FlyoutBehavior="Flyout"
+    FlyoutBackgroundColor="{StaticResource ArkanaCard}"
+    BackgroundColor="#0A0A0F"
+    TabBarBackgroundColor="#0A0A0F"
+    TabBarTitleColor="#FF1F3D"
+    TabBarUnselectedColor="#8A8A94">
+
+    <!--MENU LATERAL-->
+
+    <Shell.FlyoutHeader>
+        <Grid Padding="22,45,22,22" BackgroundColor="{StaticResource ArkanaBg}">
+            <Label FontSize="32" FontAttributes="Bold">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Ark" TextColor="White"/>
+                        <Span Text=".ana" TextColor="{StaticResource ArkanaRed}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <Shell.FlyoutFooter>
+        <VerticalStackLayout Padding="22,15">
+            <Label Text ="{x:Static info:AppInfo.Name}" TextColor="{StaticResource ArkanaMuted}"/>
+            <Label Text="{x:Static info:AppInfo.VersionString}" TextColor="{StaticResource ArkanaMuted}"/>
+        </VerticalStackLayout>
+    </Shell.FlyoutFooter>
 
     <Shell.MenuItemTemplate>
         <DataTemplate>
@@ -18,16 +42,35 @@
                 <Label Text="{Binding Text}" TextColor="White" FontSize="16" VerticalOptions="Center"/>
             </Grid>
         </DataTemplate>
+    </Shell.MenuItemTemplate>
+
+    <!-- pantalla de login -->
+    <ShellContent
+    Title="Login"
+    ContentTemplate="{DataTemplate pages:LoginPage}"
+    Route="login"
+    Shell.NavBarIsVisible="False"
+    Shell.FlyoutBehavior="Disabled"
+    FlyoutItemIsVisible="False"/>
 
     <TabBar Route="main">
 
         <ShellContent
-            Title="Inicio" ContentTemplate="{DataTemplate pages:HomePage}"/>
+        Title="🏠 Inicio"
+        ContentTemplate="{DataTemplate pages:HomePage}"
+        Shell.NavBarIsVisible="False"/>
+
         <ShellContent
-            Title="Explorar" ContentTemplate="{DataTemplate pages:SearchPage}"/>
+        Title="🔍 Buscar"
+        ContentTemplate="{DataTemplate pages:SearchPage}"/>
+
         <ShellContent
-            Title="Perfil" ContentTemplate="{DataTemplate pages:UserProfilePage}"/>
+        Title="👤 Perfil"
+        ContentTemplate="{DataTemplate pages:ProfilePage}"/>
 
     </TabBar>
+    <MenuItem Text="Acerca De Arkana" Clicked="About_Clicked"/>
+    <MenuItem Text="Documentacion" Clicked="Docs_Clicked"/>
+    <MenuItem Text="Cerrar Sesion" Clicked="Logout_Clicked"/>
 
 </Shell>

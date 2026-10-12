@@ -1,25 +1,15 @@
-﻿using Arkana.Pages;
-using Arkana.Services;
-
-namespace Arkan
-
+﻿namespace Arkana
 {
-    public App()
+    public partial class App : Application
     {
+        public App()
+        {
             InitializeComponent();
         }
 
-    protected override Window CreateWindow(IActivationState? activationState)
+        protected override Window CreateWindow(IActivationState? activationState)
         {
-            FlyoutIsPresented = false;
-            await GoToAsync(nameof(AboutPage));
-        }
-        private async void Docs_Clicked(object sender, EventArgs e)
-        {
-        {
-            Session.CurrentUser = null;
-            FlyoutIsPresented = false;
-            await GoToAsync("//Login");
+            return new Window(new AppShell());
         }
     }
 }
