@@ -3,12 +3,12 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Arkana.Pages.HomePage"
-    BackgroundColor="#0A0A0F">
+    BackgroundColor="#12040A">
 
     <Grid RowDefinitions="Auto,*">
 
         <!-- barra de arriba -->
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto,Auto" Padding="18,12">
+            <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto,Auto" Padding="18,12"
 
             <Label FontSize="26" FontAttributes="Bold" VerticalOptions="Center">
                 <Label.FormattedText>
@@ -32,27 +32,27 @@
         </Grid>
 
 
-        <!-- lista de publicaciones, con las historias arriba -->
-        <CollectionView x:Name="PostsList" Grid.Row="1" SelectionMode="None">
+            <!-- lista de publicaciones, con las historias arriba; al deslizar hacia abajo se actualiza -->
+            <RefreshView x:Name="PostsRefresh" Grid.Row="1"
 
             <CollectionView.Header>
                 <VerticalStackLayout>
 
                     <!-- historias -->
                     <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
-                        <HorizontalStackLayout Padding="18,5,18,10" Spacing="14">
+                                <HorizontalStackLayout Padding="18,12,18,10" Spacing="14">
 
                             <!-- tu historia -->
                             <VerticalStackLayout Spacing="5" WidthRequest="68">
                                 <Grid WidthRequest="64" HeightRequest="64">
                                     <Border StrokeShape="RoundRectangle 32" Stroke="#FF1F3D" StrokeThickness="2.5"
-                                            BackgroundColor="#1F1F28">
+                                                    BackgroundColor="#3A1623">
                                         <Label x:Name="StoryInitialLabel" Text="?" FontSize="22"
                                                FontAttributes="Bold" TextColor="White"
                                                HorizontalOptions="Center" VerticalOptions="Center"/>
                                     </Border>
                                     <Border StrokeShape="RoundRectangle 10" BackgroundColor="#FF1F3D"
-                                            Stroke="#0A0A0F" StrokeThickness="2"
+                                                    Stroke="#12040A" StrokeThickness="2"
                                             WidthRequest="20" HeightRequest="20"
                                             HorizontalOptions="End" VerticalOptions="End">
                                         <Label Text="+" TextColor="White" FontSize="13" FontAttributes="Bold"
@@ -68,33 +68,10 @@
                                     <DataTemplate>
                                         <VerticalStackLayout Spacing="5" WidthRequest="68">
                                             <Border StrokeShape="RoundRectangle 32" Stroke="#FF1F3D" StrokeThickness="2.5"
-                                                    WidthRequest="64" HeightRequest="64" BackgroundColor="#1F1F28">
+                                                            WidthRequest="64" HeightRequest="64" BackgroundColor="#3A1623">
                                                 <Label Text="{Binding Initial}" FontSize="22" FontAttributes="Bold"
                                                        TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
                                             </Border>
-                                            <Label Text="{Binding Username}" FontSize="11" TextColor="White"
-                                                   HorizontalOptions="Center" LineBreakMode="TailTruncation"/>
-                                        </VerticalStackLayout>
-                                    </DataTemplate>
-                                </BindableLayout.ItemTemplate>
-                            </HorizontalStackLayout>
-
-                        </HorizontalStackLayout>
-                    </ScrollView>
-
-                    <!-- que estas pensando -->
-                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" Padding="18,8,18,12">
-
-                        <Border StrokeShape="RoundRectangle 20" Stroke="#FF1F3D" StrokeThickness="2"
-                                WidthRequest="40" HeightRequest="40" BackgroundColor="#1F1F28">
-                            <Label x:Name="ComposerInitialLabel" Text="?" FontSize="16" FontAttributes="Bold"
-                                   TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
-                        </Border>
-
-                        <Border Grid.Column="1" StrokeShape="RoundRectangle 20" BackgroundColor="#14141A"
-                                Stroke="#2A2A33" StrokeThickness="1" HeightRequest="40" Padding="15,0">
-                            <Label Text="¿Qué estás pensando?" TextColor="#9A9AA5" FontSize="14"
-                                   VerticalOptions="Center"/>
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="NewPost_Tapped"/>
                             </Border.GestureRecognizers>

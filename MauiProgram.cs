@@ -3,7 +3,6 @@ using Arkana.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-
 namespace Arkana
 {
     public static class MauiProgram
@@ -18,7 +17,6 @@ namespace Arkana
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-
 
         // base de datos: una sola instancia accesible desde toda la app
         builder.Services.AddSingleton<AppDbContext>();
@@ -35,7 +33,6 @@ namespace Arkana
         builder.Logging.AddDebug();
 #endif
         return builder.Build();
-
         }   
     }
 }
