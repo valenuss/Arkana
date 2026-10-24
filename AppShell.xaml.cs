@@ -13,6 +13,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("register", typeof(RegisterPage));
         Routing.RegisterRoute("createpost", typeof(CreatePostPage));
         Routing.RegisterRoute(nameof(UserProfilePage), typeof(UserProfilePage));
+        Routing.RegisterRoute(nameof(CommentsPage), typeof(CommentsPage));
     }
 
     private async void About_Clicked(object sender, EventArgs e)

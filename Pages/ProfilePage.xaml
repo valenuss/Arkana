@@ -4,44 +4,67 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Arkana.Pages.ProfilePage"
     Title="Mi perfil"
-    BackgroundColor="#0D0D0D">
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="#12040A">
 
-    <VerticalStackLayout Padding="30" Spacing="10">
+    <Grid>
 
-        <Border StrokeShape="RoundRectangle 50" Stroke="#F43F5E" StrokeThickness="3"
-                WidthRequest="100" HeightRequest="100" BackgroundColor="#2A1A3D"
-                HorizontalOptions="Center" Margin="0,20,0,0">
-            <Label Text="👤" FontSize="50" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Border>
+        <!-- fondo con capa oscura para que todo se lea bien -->
+        <Image Source="descarga.png" Aspect="AspectFill" InputTransparent="True"
+               HorizontalOptions="Fill" VerticalOptions="Fill"/>
+        <BoxView Color="#4D12040A" InputTransparent="True"/>
 
-        <Label x:Name="NameLabel" Text="Nombre" FontSize="24" FontAttributes="Bold"
-               TextColor="White" HorizontalOptions="Center"/>
-        <Label x:Name="UsernameLabel" Text="@usuario" FontSize="14"
-               TextColor="#A855F7" HorizontalOptions="Center"/>
+        <ScrollView>
+            <VerticalStackLayout Padding="24,20" Spacing="10">
 
-        <!-- numeros -->
-        <Grid ColumnDefinitions="*,*,*" Margin="0,20,0,0">
-
-            <VerticalStackLayout Grid.Column="0">
-                <Label x:Name="PostsLabel" Text="0" FontSize="20" FontAttributes="Bold"
+                <Label Text="Mi perfil" FontSize="18" FontAttributes="Bold"
                        TextColor="White" HorizontalOptions="Center"/>
-                <Label Text="Publicaciones" FontSize="12" TextColor="#888888" HorizontalOptions="Center"/>
-            </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Column="1">
-                <Label x:Name="FollowersLabel" Text="0" FontSize="20" FontAttributes="Bold"
+                <Border StrokeShape="RoundRectangle 50" Stroke="#FF1F3D" StrokeThickness="3"
+                        WidthRequest="100" HeightRequest="100" BackgroundColor="#3A1623"
+                        HorizontalOptions="Center" Margin="0,25,0,0">
+                    <Label x:Name="InitialLabel" Text="?" FontSize="44" FontAttributes="Bold"
+                           TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
+
+                <Label x:Name="NameLabel" Text="Nombre" FontSize="24" FontAttributes="Bold"
                        TextColor="White" HorizontalOptions="Center"/>
-                <Label Text="Seguidores" FontSize="12" TextColor="#888888" HorizontalOptions="Center"/>
+                <Label x:Name="UsernameLabel" Text="@usuario" FontSize="14"
+                       TextColor="#CDB4BA" HorizontalOptions="Center"/>
+
+                <!-- numeros -->
+                <Border BackgroundColor="#CC240E18" Stroke="#40E0A8B0" StrokeThickness="1"
+                        StrokeShape="RoundRectangle 18" Padding="10,16" Margin="0,24,0,0">
+                    <Grid ColumnDefinitions="*,Auto,*,Auto,*">
+
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label x:Name="PostsLabel" Text="0" FontSize="20" FontAttributes="Bold"
+                                   TextColor="White" HorizontalOptions="Center"/>
+                            <Label Text="Publicaciones" FontSize="12" TextColor="#CDB4BA" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+
+                        <BoxView Grid.Column="1" WidthRequest="1" Color="#40E0A8B0"/>
+
+                        <VerticalStackLayout Grid.Column="2">
+                            <Label x:Name="FollowersLabel" Text="0" FontSize="20" FontAttributes="Bold"
+                                   TextColor="White" HorizontalOptions="Center"/>
+                            <Label Text="Seguidores" FontSize="12" TextColor="#CDB4BA" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+
+                        <BoxView Grid.Column="3" WidthRequest="1" Color="#40E0A8B0"/>
+
+                        <VerticalStackLayout Grid.Column="4">
+                            <Label x:Name="FollowingLabel" Text="0" FontSize="20" FontAttributes="Bold"
+                                   TextColor="White" HorizontalOptions="Center"/>
+                            <Label Text="Siguiendo" FontSize="12" TextColor="#CDB4BA" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </Border>
+
             </VerticalStackLayout>
+        </ScrollView>
 
-            <VerticalStackLayout Grid.Column="2">
-                <Label x:Name="FollowingLabel" Text="0" FontSize="20" FontAttributes="Bold"
-                       TextColor="White" HorizontalOptions="Center"/>
-                <Label Text="Siguiendo" FontSize="12" TextColor="#888888" HorizontalOptions="Center"/>
-            </VerticalStackLayout>
-
-        </Grid>
-
-    </VerticalStackLayout>
+    </Grid>
 
 </ContentPage>

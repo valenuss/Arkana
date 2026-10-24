@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Arkana.Pages.CommentsPage"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False"
+    BackgroundColor="#12040A">
+
+    <Grid>
+
+        <!-- fondo con capa oscura para que todo se lea bien -->
+        <Image Source="descarga.png" Aspect="AspectFill" InputTransparent="True"
+               HorizontalOptions="Fill" VerticalOptions="Fill"/>
+        <BoxView Color="#4D12040A" InputTransparent="True"/>
+
+        <Grid RowDefinitions="Auto,Auto,*,Auto">
+
+            <!-- barra de arriba con flecha para volver -->
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="18,12"
+                  BackgroundColor="#B312040A">
+
+                <Label Text="←" FontSize="26" TextColor="White" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Back_Tapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <Label Grid.Column="1" Text="Comentarios" FontSize="18" FontAttributes="Bold"
+                       TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                <!-- columna vacia para que el titulo quede centrado -->
+                <Label Grid.Column="2" Text="    " FontSize="26"/>
+
+            </Grid>
+
+            <!-- la publicacion original -->
+            <Border Grid.Row="1" BackgroundColor="#CC240E18" Stroke="#40E0A8B0" StrokeThickness="1"
+                    StrokeShape="RoundRectangle 16" Padding="14" Margin="14,12,14,4">
+                <VerticalStackLayout Spacing="4">
+                    <Label x:Name="PostAuthorLabel" Text="@usuario" TextColor="#FF1F3D"
+                           FontAttributes="Bold" FontSize="13"/>
+                    <Label x:Name="PostContentLabel" Text="" TextColor="White" FontSize="14"
+                           MaxLines="3" LineBreakMode="TailTruncation"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- lista de comentarios -->
+            <CollectionView Grid.Row="2" x:Name="CommentsList" SelectionMode="None">
+
+                <CollectionView.EmptyView>
+                    <Label Text="Todavía no hay comentarios. ¡Escribe el primero!"
+                           TextColor="#CDB4BA" FontSize="14"
+                           HorizontalOptions="Center" HorizontalTextAlignment="Center"
+                           Margin="30,40"/>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="#CC240E18" Stroke="#40E0A8B0" StrokeThickness="1"
+                                StrokeShape="RoundRectangle 16" Padding="12" Margin="14,5">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+
+                                <Border StrokeShape="RoundRectangle 18" Stroke="#FF1F3D" StrokeThickness="2"
+                                        WidthRequest="36" HeightRequest="36" BackgroundColor="#3A1623"
+                                        VerticalOptions="Start">
+                                    <Label Text="{Binding Initial}" FontSize="14" FontAttributes="Bold"
+                                           TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Label Text="{Binding Username}" TextColor="White"
+                                               FontAttributes="Bold" FontSize="13"/>
+                                        <Label Text="{Binding TimeAgo}" TextColor="#CDB4BA" FontSize="11"
+                                               VerticalOptions="Center"/>
+                                    </HorizontalStackLayout>
+                                    <Label Text="{Binding Content}" TextColor="White" FontSize="14"/>
+                                </VerticalStackLayout>
+
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+            <!-- escribir un comentario -->
+            <Grid Grid.Row="3" ColumnDefinitions="*,Auto" ColumnSpacing="10" Padding="14,10"
+                  BackgroundColor="#B312040A">
+
+                <Border BackgroundColor="#CC240E18" Stroke="#40E0A8B0" StrokeThickness="1"
+                        StrokeShape="RoundRectangle 22" Padding="16,0">
+                    <Entry x:Name="CommentEntry"
+                           Placeholder="Escribe un comentario..."
+                           PlaceholderColor="#A88A92"
+                           TextColor="White" BackgroundColor="Transparent"
+                           HeightRequest="44" MaxLength="200"
+                           ReturnType="Send"
+                           Completed="Send_Clicked"/>
+                </Border>
+
+                <Button Grid.Column="1" Text="Enviar"
+                        Clicked="Send_Clicked"
+                        BackgroundColor="#FF1F3D" TextColor="White"
+                        FontAttributes="Bold" CornerRadius="22"
+                        HeightRequest="44" Padding="20,0"/>
+
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

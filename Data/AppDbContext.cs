@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Follow> Follows { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 
     // base de datos en memoria (se borra cuando cierras la app)
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -45,6 +46,12 @@ public class AppDbContext : DbContext
             new Follow { Id = 3, FollowerId = 4, FollowingId = 1 },
             new Follow { Id = 4, FollowerId = 5, FollowingId = 1 },
             new Follow { Id = 5, FollowerId = 6, FollowingId = 1 }
+        );
+
+        modelBuilder.Entity<Comment>().HasData(
+            new Comment { Id = 1, PostId = 1, UserId = 2, Username = "sebas", Content = "Qué belleza, se ve increíble ✨", Date = new DateTime(2026, 10, 1, 21, 30, 0) },
+            new Comment { Id = 2, PostId = 1, UserId = 3, Username = "vale", Content = "Hoy se ven todas las estrellas", Date = new DateTime(2026, 10, 1, 22, 10, 0) },
+            new Comment { Id = 3, PostId = 3, UserId = 1, Username = "luna", Content = "¡Quiero escucharte tocar!", Date = new DateTime(2026, 10, 3, 19, 0, 0) }
         );
     }
 }

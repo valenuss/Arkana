@@ -16,19 +16,41 @@ public partial class RegisterPage : ContentPage
     // boton de crear cuenta
     private async void RegisterButton_Clicked(object sender, EventArgs e)
     {
-        // sacar lo que escribieron
-        string name = NameEntry.Text;
-        string username = UsernameEntry.Text;
-        string email = EmailEntry.Text;
-        string password = PasswordEntry.Text;
-        string confirmPassword = ConfirmPasswordEntry.Text;
+        // sacar lo que escribieron (sin espacios de mas al inicio o al final)
+        string name = (NameEntry.Text ?? "").Trim();
+        string username = (UsernameEntry.Text ?? "").Trim();
+        string email = (EmailEntry.Text ?? "").Trim();
+        string password = PasswordEntry.Text ?? "";
+        string confirmPassword = ConfirmPasswordEntry.Text ?? "";
 
         // que no falte ningun campo
-        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(username) ||
-            string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) ||
-            string.IsNullOrWhiteSpace(confirmPassword))
+        if (name == "" || username == "" || email == "" ||
+            string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
         {
             await DisplayAlert("Error", "Debes llenar todos los campos.", "Aceptar");
+            return;
+        }
+
+        // el nombre de usuario: minimo 3 letras y sin espacios
+        if (username.Length < 3 || username.Contains(" "))
+        {
+            await DisplayAlert("Error", "El usuario debe tener al menos 3 caracteres y no puede llevar espacios.", "Aceptar");
+            return;
+        }
+
+        // el correo tiene que verse como un correo
+        bool correoValido = email.Contains("@") && email.Contains(".") && !email.Contains(" ");
+
+        if (correoValido == false)
+        {
+            await DisplayAlert("Error", "Escribe un correo válido, por ejemplo nombre@correo.com.", "Aceptar");
+            return;
+        }
+
+        // la contraseña tiene que tener un minimo
+        if (password.Length < 6)
+        {
+            await DisplayAlert("Error", "La contraseña debe tener al menos 6 caracteres.", "Aceptar");
             return;
         }
 

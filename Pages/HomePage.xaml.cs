@@ -22,7 +22,22 @@ public partial class HomePage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        CargarDatos();
+    }
 
+    // al deslizar la lista hacia abajo se vuelve a cargar todo
+    private async void PostsRefresh_Refreshing(object sender, EventArgs e)
+    {
+        // una pausa corta para que se vea la animacion
+        await Task.Delay(400);
+
+        CargarDatos();
+        PostsRefresh.IsRefreshing = false;
+    }
+
+    // llena las historias y las publicaciones desde la base de datos
+    void CargarDatos()
+    {
         User actual = Session.CurrentUser;
 
         if (actual == null)
@@ -61,10 +76,14 @@ public partial class HomePage : ContentPage
             item.Content = p.Content;
             item.Likes = p.Likes;
             item.Liked = likedIds.Contains(p.Id);
+            item.CommentsCount = db.Comments.Count(c => c.PostId == p.Id);
             lista.Add(item);
         }
 
         PostsList.ItemsSource = lista;
+
+        // si no hay publicaciones, se muestra un mensaje amable
+        EmptyPostsLabel.IsVisible = lista.Count == 0;
     }
 
     // convierte la fecha en "hace 2 h"
@@ -116,6 +135,15 @@ public partial class HomePage : ContentPage
         }
     }
 
+    // abrir los comentarios de la publicacion
+    private async void Comment_Tapped(object sender, TappedEventArgs e)
+    {
+        Label icono = (Label)sender;
+        PostItem item = (PostItem)icono.BindingContext;
+
+        await Shell.Current.GoToAsync($"{nameof(CommentsPage)}?postId={item.Id}");
+    }
+
     // abrir la pantalla de publicar (por su ruta)
     private async void NewPost_Tapped(object sender, TappedEventArgs e)
     {
@@ -148,6 +176,7 @@ public class PostItem : INotifyPropertyChanged
     public string Initial { get; set; }
     public string TimeAgo { get; set; }
     public string Content { get; set; }
+    public int CommentsCount { get; set; }
 
     int likes;
     public int Likes

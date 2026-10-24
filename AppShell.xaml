@@ -9,8 +9,8 @@
     Title="Arkana"
     FlyoutBehavior="Flyout"
     FlyoutBackgroundColor="{StaticResource ArkanaCard}"
-    BackgroundColor="#0A0A0F"
-    TabBarBackgroundColor="#0A0A0F"
+    BackgroundColor="#12040A"
+    TabBarBackgroundColor="#12040A"
     TabBarTitleColor="#FF1F3D"
     TabBarUnselectedColor="#8A8A94">
 

@@ -20,8 +20,8 @@ public partial class LoginPage : ContentPage
     {
         try
         {
-            string email = EmailEntry.Text;
-            string password = PasswordEntry.Text;
+            string email = EmailEntry.Text?.Trim();
+            string password = PasswordEntry.Text?.Trim();
 
             // revisar que no dejen nada vacio
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))

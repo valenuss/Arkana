@@ -5,139 +5,197 @@
     x:Class="Arkana.Pages.HomePage"
     BackgroundColor="#12040A">
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid>
 
-        <!-- barra de arriba -->
+        <!-- fondo con capa oscura para que todo se lea bien -->
+        <Image Source="descarga.png" Aspect="AspectFill" InputTransparent="True"
+               HorizontalOptions="Fill" VerticalOptions="Fill"/>
+        <BoxView Color="#4D12040A" InputTransparent="True"/>
+
+        <Grid RowDefinitions="Auto,*">
+
+            <!-- barra de arriba -->
             <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto,Auto" Padding="18,12"
+                  BackgroundColor="#B312040A">
 
-            <Label FontSize="26" FontAttributes="Bold" VerticalOptions="Center">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Ark" TextColor="White"/>
-                        <Span Text="ana" TextColor="#FF1F3D"/>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+                <Label FontSize="26" FontAttributes="Bold" VerticalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Ark" TextColor="White"/>
+                            <Span Text="ana" TextColor="#FF1F3D"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
 
-            <Label Grid.Column="1" Text="🔍" FontSize="22" Margin="8,0" VerticalOptions="Center"/>
-            <Label Grid.Column="2" Text="🔔" FontSize="22" Margin="8,0" VerticalOptions="Center"/>
+                <Label Grid.Column="1" Text="🔍" FontSize="22" Margin="8,0" VerticalOptions="Center"/>
+                <Label Grid.Column="2" Text="🔔" FontSize="22" Margin="8,0" VerticalOptions="Center"/>
 
-            <!-- cerrar sesion -->
-            <Label Grid.Column="3" Text="🚪" FontSize="22" Margin="8,0,0,0" VerticalOptions="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Logout_Clicked"/>
-                </Label.GestureRecognizers>
-            </Label>
+                <!-- cerrar sesion -->
+                <Label Grid.Column="3" Text="🚪" FontSize="22" Margin="8,0,0,0" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Logout_Clicked"/>
+                    </Label.GestureRecognizers>
+                </Label>
 
-        </Grid>
+            </Grid>
 
 
             <!-- lista de publicaciones, con las historias arriba; al deslizar hacia abajo se actualiza -->
             <RefreshView x:Name="PostsRefresh" Grid.Row="1"
+                         Refreshing="PostsRefresh_Refreshing"
+                         RefreshColor="#FF1F3D" BackgroundColor="#3A1623">
 
-            <CollectionView.Header>
-                <VerticalStackLayout>
+                <CollectionView x:Name="PostsList" SelectionMode="None">
 
-                    <!-- historias -->
-                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                    <CollectionView.Header>
+                        <VerticalStackLayout>
+
+                            <!-- historias -->
+                            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                                 <HorizontalStackLayout Padding="18,12,18,10" Spacing="14">
 
-                            <!-- tu historia -->
-                            <VerticalStackLayout Spacing="5" WidthRequest="68">
-                                <Grid WidthRequest="64" HeightRequest="64">
-                                    <Border StrokeShape="RoundRectangle 32" Stroke="#FF1F3D" StrokeThickness="2.5"
-                                                    BackgroundColor="#3A1623">
-                                        <Label x:Name="StoryInitialLabel" Text="?" FontSize="22"
-                                               FontAttributes="Bold" TextColor="White"
-                                               HorizontalOptions="Center" VerticalOptions="Center"/>
-                                    </Border>
-                                    <Border StrokeShape="RoundRectangle 10" BackgroundColor="#FF1F3D"
-                                                    Stroke="#12040A" StrokeThickness="2"
-                                            WidthRequest="20" HeightRequest="20"
-                                            HorizontalOptions="End" VerticalOptions="End">
-                                        <Label Text="+" TextColor="White" FontSize="13" FontAttributes="Bold"
-                                               HorizontalOptions="Center" VerticalOptions="Center"/>
-                                    </Border>
-                                </Grid>
-                                <Label Text="Tu historia" FontSize="11" TextColor="White" HorizontalOptions="Center"/>
-                            </VerticalStackLayout>
-
-                            <!-- historias de los demas usuarios -->
-                            <HorizontalStackLayout x:Name="StoriesLayout" Spacing="14">
-                                <BindableLayout.ItemTemplate>
-                                    <DataTemplate>
-                                        <VerticalStackLayout Spacing="5" WidthRequest="68">
+                                    <!-- tu historia -->
+                                    <VerticalStackLayout Spacing="5" WidthRequest="68">
+                                        <Grid WidthRequest="64" HeightRequest="64">
                                             <Border StrokeShape="RoundRectangle 32" Stroke="#FF1F3D" StrokeThickness="2.5"
-                                                            WidthRequest="64" HeightRequest="64" BackgroundColor="#3A1623">
-                                                <Label Text="{Binding Initial}" FontSize="22" FontAttributes="Bold"
-                                                       TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                                    BackgroundColor="#3A1623">
+                                                <Label x:Name="StoryInitialLabel" Text="?" FontSize="22"
+                                                       FontAttributes="Bold" TextColor="White"
+                                                       HorizontalOptions="Center" VerticalOptions="Center"/>
                                             </Border>
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="NewPost_Tapped"/>
-                            </Border.GestureRecognizers>
-                        </Border>
+                                            <Border StrokeShape="RoundRectangle 10" BackgroundColor="#FF1F3D"
+                                                    Stroke="#12040A" StrokeThickness="2"
+                                                    WidthRequest="20" HeightRequest="20"
+                                                    HorizontalOptions="End" VerticalOptions="End">
+                                                <Label Text="+" TextColor="White" FontSize="13" FontAttributes="Bold"
+                                                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                                            </Border>
+                                        </Grid>
+                                        <Label Text="Tu historia" FontSize="11" TextColor="White" HorizontalOptions="Center"/>
+                                    </VerticalStackLayout>
 
-                    </Grid>
+                                    <!-- historias de los demas usuarios -->
+                                    <HorizontalStackLayout x:Name="StoriesLayout" Spacing="14">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <VerticalStackLayout Spacing="5" WidthRequest="68">
+                                                    <Border StrokeShape="RoundRectangle 32" Stroke="#FF1F3D" StrokeThickness="2.5"
+                                                            WidthRequest="64" HeightRequest="64" BackgroundColor="#3A1623">
+                                                        <Label Text="{Binding Initial}" FontSize="22" FontAttributes="Bold"
+                                                               TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                                    </Border>
+                                                    <Label Text="{Binding Username}" FontSize="11" TextColor="White"
+                                                           HorizontalOptions="Center" LineBreakMode="TailTruncation"/>
+                                                </VerticalStackLayout>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </HorizontalStackLayout>
 
-                </VerticalStackLayout>
-            </CollectionView.Header>
+                                </HorizontalStackLayout>
+                            </ScrollView>
 
-
-            <!-- como se ve cada publicacion -->
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Border BackgroundColor="#14141A" Stroke="#22222B" StrokeThickness="1"
-                            StrokeShape="RoundRectangle 16" Padding="14" Margin="14,6">
-
-                        <VerticalStackLayout Spacing="12">
-
-                            <!-- quien publico -->
-                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                            <!-- que estas pensando -->
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" Padding="18,8,18,12">
 
                                 <Border StrokeShape="RoundRectangle 20" Stroke="#FF1F3D" StrokeThickness="2"
-                                        WidthRequest="40" HeightRequest="40" BackgroundColor="#1F1F28">
-                                    <Label Text="{Binding Initial}" FontSize="16" FontAttributes="Bold"
+                                        WidthRequest="40" HeightRequest="40" BackgroundColor="#3A1623">
+                                    <Label x:Name="ComposerInitialLabel" Text="?" FontSize="16" FontAttributes="Bold"
                                            TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
                                 </Border>
 
-                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                                    <Label Text="{Binding Username}" TextColor="White"
-                                           FontAttributes="Bold" FontSize="14"/>
-                                    <Label Text="{Binding TimeAgo}" TextColor="#9A9AA5" FontSize="11"/>
-                                </VerticalStackLayout>
-
-                                <Label Grid.Column="2" Text="⋮" TextColor="#9A9AA5" FontSize="20"
-                                       VerticalOptions="Center"/>
+                                <Border Grid.Column="1" StrokeShape="RoundRectangle 20" BackgroundColor="#CC240E18"
+                                        Stroke="#40E0A8B0" StrokeThickness="1" HeightRequest="40" Padding="15,0">
+                                    <Label Text="¿Qué estás pensando?" TextColor="#CDB4BA" FontSize="14"
+                                           VerticalOptions="Center"/>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="NewPost_Tapped"/>
+                                    </Border.GestureRecognizers>
+                                </Border>
 
                             </Grid>
 
-                            <!-- texto -->
-                            <Label Text="{Binding Content}" TextColor="White" FontSize="15"/>
-
-                            <!-- me gusta, comentar, compartir -->
-                            <HorizontalStackLayout Spacing="22">
-
-                                <HorizontalStackLayout Spacing="6">
-                                    <Label Text="{Binding Heart}" FontSize="22" VerticalOptions="Center">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="Like_Tapped"/>
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                    <Label Text="{Binding Likes}" TextColor="#CCCCCC" FontSize="13"
-                                           VerticalOptions="Center"/>
-                                </HorizontalStackLayout>
-
-                                <Label Text="💬" FontSize="20" VerticalOptions="Center"/>
-                                <Label Text="📤" FontSize="20" VerticalOptions="Center"/>
-
-                            </HorizontalStackLayout>
+                            <!-- aparece solo cuando todavia no hay publicaciones -->
+                            <Label x:Name="EmptyPostsLabel" IsVisible="False"
+                                   Text="Aún no hay publicaciones. ¡Sé el primero en publicar!"
+                                   TextColor="#CDB4BA" FontSize="14"
+                                   HorizontalOptions="Center" HorizontalTextAlignment="Center"
+                                   Margin="30,30"/>
 
                         </VerticalStackLayout>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
+                    </CollectionView.Header>
 
-        </CollectionView>
+
+                    <!-- como se ve cada publicacion -->
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border BackgroundColor="#CC240E18" Stroke="#40E0A8B0" StrokeThickness="1"
+                                    StrokeShape="RoundRectangle 18" Padding="16" Margin="14,6">
+
+                                <VerticalStackLayout Spacing="12">
+
+                                    <!-- quien publico -->
+                                    <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+
+                                        <Border StrokeShape="RoundRectangle 20" Stroke="#FF1F3D" StrokeThickness="2"
+                                                WidthRequest="40" HeightRequest="40" BackgroundColor="#3A1623">
+                                            <Label Text="{Binding Initial}" FontSize="16" FontAttributes="Bold"
+                                                   TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        </Border>
+
+                                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                            <Label Text="{Binding Username}" TextColor="White"
+                                                   FontAttributes="Bold" FontSize="14"/>
+                                            <Label Text="{Binding TimeAgo}" TextColor="#CDB4BA" FontSize="11"/>
+                                        </VerticalStackLayout>
+
+                                        <Label Grid.Column="2" Text="⋮" TextColor="#CDB4BA" FontSize="20"
+                                               VerticalOptions="Center"/>
+
+                                    </Grid>
+
+                                    <!-- texto -->
+                                    <Label Text="{Binding Content}" TextColor="White" FontSize="15" LineHeight="1.2"/>
+
+                                    <!-- linea suave para separar -->
+                                    <BoxView HeightRequest="1" Color="#26E0A8B0"/>
+
+                                    <!-- me gusta, comentar, compartir -->
+                                    <HorizontalStackLayout Spacing="22">
+
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Label Text="{Binding Heart}" FontSize="22" VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="Like_Tapped"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                            <Label Text="{Binding Likes}" TextColor="#E6D5D9" FontSize="13"
+                                                   VerticalOptions="Center"/>
+                                        </HorizontalStackLayout>
+
+                                        <!-- comentarios: toca el icono para abrirlos -->
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Label Text="💬" FontSize="20" VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="Comment_Tapped"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                            <Label Text="{Binding CommentsCount}" TextColor="#E6D5D9" FontSize="13"
+                                                   VerticalOptions="Center"/>
+                                        </HorizontalStackLayout>
+                                        <Label Text="📤" FontSize="20" VerticalOptions="Center"/>
+
+                                    </HorizontalStackLayout>
+
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+            </RefreshView>
+
+        </Grid>
 
     </Grid>
 

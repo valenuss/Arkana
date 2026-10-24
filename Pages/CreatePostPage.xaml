@@ -5,69 +5,80 @@
     x:Class="Arkana.Pages.CreatePostPage"
     Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False"
-    BackgroundColor="#0A0A0F">
+    BackgroundColor="#12040A">
 
-    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="18">
+    <Grid>
 
-        <!-- barra de arriba -->
-        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="0,5,0,15">
+        <!-- fondo con capa oscura para que todo se lea bien -->
+        <Image Source="descarga.png" Aspect="AspectFill" InputTransparent="True"
+               HorizontalOptions="Fill" VerticalOptions="Fill"/>
+        <BoxView Color="#4D12040A" InputTransparent="True"/>
 
-            <Label Text="✕" FontSize="22" TextColor="White" VerticalOptions="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="Close_Tapped"/>
-                </Label.GestureRecognizers>
-            </Label>
+        <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="18">
 
-            <Label Grid.Column="1" Text="Crear publicación" FontSize="18" FontAttributes="Bold"
-                   TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <!-- barra de arriba -->
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="0,5,0,15">
 
-        </Grid>
+                <Label Text="✕" FontSize="22" TextColor="White" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="Close_Tapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
 
-        <!-- quien publica -->
-        <Border Grid.Row="1" BackgroundColor="#14141A" Stroke="#22222B" StrokeThickness="1"
-                StrokeShape="RoundRectangle 14" Padding="12">
-            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-
-                <Border StrokeShape="RoundRectangle 22" Stroke="#FF1F3D" StrokeThickness="2"
-                        WidthRequest="44" HeightRequest="44" BackgroundColor="#1F1F28">
-                    <Label x:Name="InitialLabel" Text="?" FontSize="18" FontAttributes="Bold"
-                           TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
-                </Border>
-
-                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
-                    <Label x:Name="NameLabel" Text="Nombre" TextColor="White"
-                           FontAttributes="Bold" FontSize="15"/>
-                    <Label x:Name="UsernameLabel" Text="@usuario" TextColor="#9A9AA5" FontSize="12"/>
-                </VerticalStackLayout>
+                <Label Grid.Column="1" Text="Crear publicación" FontSize="18" FontAttributes="Bold"
+                       TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
 
             </Grid>
-        </Border>
 
-        <!-- donde se escribe -->
-        <Editor Grid.Row="2" x:Name="ContentEditor"
-                Placeholder="¿Qué estás pensando?"
-                PlaceholderColor="#6B6B76"
-                TextColor="White"
-                BackgroundColor="Transparent"
-                FontSize="17"
-                MaxLength="280"
-                TextChanged="ContentEditor_TextChanged"
-                Margin="0,15,0,0"/>
+            <!-- quien publica -->
+            <Border Grid.Row="1" BackgroundColor="#CC240E18" Stroke="#40E0A8B0" StrokeThickness="1"
+                    StrokeShape="RoundRectangle 16" Padding="12">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
 
-        <!-- contador y boton -->
-        <VerticalStackLayout Grid.Row="3" Spacing="10">
+                    <Border StrokeShape="RoundRectangle 22" Stroke="#FF1F3D" StrokeThickness="2"
+                            WidthRequest="44" HeightRequest="44" BackgroundColor="#3A1623">
+                        <Label x:Name="InitialLabel" Text="?" FontSize="18" FontAttributes="Bold"
+                               TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </Border>
 
-            <Label x:Name="CounterLabel" Text="0 / 280" TextColor="#9A9AA5" FontSize="12"
-                   HorizontalOptions="End"/>
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                        <Label x:Name="NameLabel" Text="Nombre" TextColor="White"
+                               FontAttributes="Bold" FontSize="15"/>
+                        <Label x:Name="UsernameLabel" Text="@usuario" TextColor="#CDB4BA" FontSize="12"/>
+                    </VerticalStackLayout>
 
-            <Button Text="Publicar"
-                    Clicked="Publish_Clicked"
-                    BackgroundColor="#FF1F3D"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    HeightRequest="50" CornerRadius="25"/>
+                </Grid>
+            </Border>
 
-        </VerticalStackLayout>
+            <!-- donde se escribe -->
+            <Border Grid.Row="2" BackgroundColor="#CC240E18" Stroke="#40E0A8B0" StrokeThickness="1"
+                    StrokeShape="RoundRectangle 16" Padding="14" Margin="0,15,0,0">
+                <Editor x:Name="ContentEditor"
+                        Placeholder="¿Qué estás pensando?"
+                        PlaceholderColor="#A88A92"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        FontSize="17"
+                        MaxLength="280"
+                        TextChanged="ContentEditor_TextChanged"/>
+            </Border>
+
+            <!-- contador y boton -->
+            <VerticalStackLayout Grid.Row="3" Spacing="10" Margin="0,12,0,0">
+
+                <Label x:Name="CounterLabel" Text="0 / 280" TextColor="#CDB4BA" FontSize="12"
+                       HorizontalOptions="End"/>
+
+                <Button Text="Publicar"
+                        Clicked="Publish_Clicked"
+                        BackgroundColor="#FF1F3D"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HeightRequest="50" CornerRadius="25"/>
+
+            </VerticalStackLayout>
+
+        </Grid>
 
     </Grid>
 

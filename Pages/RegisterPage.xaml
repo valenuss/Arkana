@@ -4,19 +4,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Arkana.Pages.RegisterPage"
     Shell.NavBarIsVisible="False"
-    BackgroundColor="#0A0A0F">
+    BackgroundColor="#12040A">
 
     <!-- estilos para no repetir en cada campo -->
     <ContentPage.Resources>
         <Style x:Key="FieldBox" TargetType="Border">
-            <Setter Property="BackgroundColor" Value="#14141A"/>
-            <Setter Property="Stroke" Value="#2A2A33"/>
+            <Setter Property="BackgroundColor" Value="#CC240E18"/>
+            <Setter Property="Stroke" Value="#40E0A8B0"/>
             <Setter Property="StrokeThickness" Value="1"/>
             <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
             <Setter Property="Padding" Value="14,0"/>
         </Style>
         <Style x:Key="FieldEntry" TargetType="Entry">
-            <Setter Property="PlaceholderColor" Value="#6B6B76"/>
+            <Setter Property="PlaceholderColor" Value="#A88A92"/>
             <Setter Property="TextColor" Value="White"/>
             <Setter Property="BackgroundColor" Value="Transparent"/>
             <Setter Property="HeightRequest" Value="50"/>

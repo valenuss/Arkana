@@ -29,6 +29,9 @@ public partial class ProfilePage : ContentPage
         NameLabel.Text = usuario.Name;
         UsernameLabel.Text = "@" + usuario.Username;
 
+        // la inicial del usuario va en su circulo (igual que en las demas pantallas)
+        InitialLabel.Text = usuario.Username.Substring(0, 1).ToUpper();
+
         // consultas a la base de datos con LINQ
         PostsLabel.Text = db.Posts.Count(p => p.UserId == usuario.Id).ToString();
         FollowersLabel.Text = db.Follows.Count(f => f.FollowingId == usuario.Id).ToString();
