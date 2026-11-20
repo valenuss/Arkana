@@ -1,4 +1,5 @@
 using Arkana.Data;
+using Arkana.Helpers;
 using Arkana.Models;
 using Arkana.Services;
 
@@ -6,6 +7,8 @@ namespace Arkana.Pages;
 
 public partial class CreatePostPage : ContentPage
 {
+    const int MaxLength = 280;
+
     readonly AppDbContext db;
 
     public CreatePostPage(AppDbContext db)
@@ -14,66 +17,61 @@ public partial class CreatePostPage : ContentPage
         this.db = db;
     }
 
-    // mostrar quien esta publicando cada vez que se abre
+    // mostrar quién está publicando cada vez que se abre
     protected override void OnAppearing()
     {
         base.OnAppearing();
 
-        User actual = Session.CurrentUser;
-
-        if (actual != null)
+        if (Session.CurrentUser is { } current)
         {
-            InitialLabel.Text = actual.Username.Substring(0, 1).ToUpper();
-            NameLabel.Text = actual.Name;
-            UsernameLabel.Text = "@" + actual.Username;
+            UserAvatar.Initial = current.Username.ToInitial();
+            NameLabel.Text = current.Name;
+            UsernameLabel.Text = "@" + current.Username;
         }
 
-        ContentEditor.Text = "";
+        ContentEditor.Text = string.Empty;
+        PublishButton.IsEnabled = false;
     }
 
-    // actualizar el contador de letras
-    private void ContentEditor_TextChanged(object sender, TextChangedEventArgs e)
+    // actualizar el contador y habilitar "Publicar" solo si hay texto
+    private void ContentEditor_TextChanged(object? sender, TextChangedEventArgs e)
     {
-        int cantidad = 0;
+        var length = e.NewTextValue?.Length ?? 0;
 
-        if (e.NewTextValue != null)
-        {
-            cantidad = e.NewTextValue.Length;
-        }
-
-        CounterLabel.Text = cantidad + " / 280";
+        CounterLabel.Text = $"{length} / {MaxLength}";
+        PublishButton.IsEnabled = !string.IsNullOrWhiteSpace(e.NewTextValue);
     }
 
-    // guardar la publicacion
-    private async void Publish_Clicked(object sender, EventArgs e)
+    // guardar la publicación
+    private async void Publish_Clicked(object? sender, EventArgs e)
     {
         try
         {
-            string texto = ContentEditor.Text;
+            var text = ContentEditor.Text?.Trim();
 
-            // que no este vacia
-            if (string.IsNullOrWhiteSpace(texto))
+            if (string.IsNullOrEmpty(text))
             {
                 await DisplayAlert("Error", "Escribe algo antes de publicar.", "Aceptar");
                 return;
             }
 
-            User actual = Session.CurrentUser;
+            if (Session.CurrentUser is not { } current)
+            {
+                return;
+            }
 
-            // crear la publicacion
-            Post nuevo = new Post();
-            nuevo.UserId = actual.Id;
-            nuevo.Username = actual.Username;
-            nuevo.Content = texto.Trim();
-            nuevo.Date = DateTime.Now;
-            nuevo.Likes = 0;
-
-            // guardarla en la base de datos
-            db.Posts.Add(nuevo);
+            db.Posts.Add(new Post
+            {
+                UserId = current.Id,
+                Username = current.Username,
+                Content = text,
+                Date = DateTime.Now,
+                Likes = 0
+            });
             db.SaveChanges();
 
-            // volver al home
-            await Navigation.PopAsync();
+            // volver al inicio
+            await Shell.Current.GoToAsync("..");
         }
         catch (Exception ex)
         {
@@ -82,8 +80,6 @@ public partial class CreatePostPage : ContentPage
     }
 
     // cerrar sin publicar
-    private async void Close_Tapped(object sender, TappedEventArgs e)
-    {
-        await Navigation.PopAsync();
-    }
+    private async void Close_Tapped(object? sender, TappedEventArgs e) =>
+        await Shell.Current.GoToAsync("..");
 }

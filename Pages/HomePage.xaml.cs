@@ -1,6 +1,5 @@
-using System.ComponentModel;
 using Arkana.Data;
-using Arkana.Models;
+using Arkana.Helpers;
 using Arkana.Services;
 
 namespace Arkana.Pages;
@@ -9,214 +8,120 @@ public partial class HomePage : ContentPage
 {
     readonly AppDbContext db;
 
-    // ids de las publicaciones a las que ya le di me gusta
-    static List<int> likedIds = new List<int>();
-
     public HomePage(AppDbContext db)
     {
         InitializeComponent();
         this.db = db;
     }
 
-    // cada vez que se muestra el home, se cargan los datos
+    // cada vez que se muestra el inicio, se cargan los datos
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        CargarDatos();
-    }
 
-    // al deslizar la lista hacia abajo se vuelve a cargar todo
-    private async void PostsRefresh_Refreshing(object sender, EventArgs e)
-    {
-        // una pausa corta para que se vea la animacion
-        await Task.Delay(400);
-
-        CargarDatos();
-        PostsRefresh.IsRefreshing = false;
-    }
-
-    // llena las historias y las publicaciones desde la base de datos
-    void CargarDatos()
-    {
-        User actual = Session.CurrentUser;
-
-        if (actual == null)
+        if (Session.CurrentUser is not { } current)
         {
             return;
         }
 
-        // la inicial del usuario va en su circulo
-        string inicial = actual.Username.Substring(0, 1).ToUpper();
-        StoryInitialLabel.Text = inicial;
-        ComposerInitialLabel.Text = inicial;
+        // la inicial del usuario va en su círculo
+        var initial = current.Username.ToInitial();
+        StoryAvatar.Initial = initial;
+        ComposerAvatar.Initial = initial;
 
-        // historias: los demas usuarios
-        List<StoryItem> historias = new List<StoryItem>();
+        // historias: los demás usuarios
+        var stories = db.Users
+            .Where(u => u.Id != current.Id)
+            .AsEnumerable()
+            .Select(u => new StoryItem(u.Username, u.Username.ToInitial()))
+            .ToList();
 
-        foreach (User u in db.Users.Where(u => u.Id != actual.Id).ToList())
-        {
-            StoryItem historia = new StoryItem();
-            historia.Username = u.Username;
-            historia.Initial = u.Username.Substring(0, 1).ToUpper();
-            historias.Add(historia);
-        }
+        BindableLayout.SetItemsSource(StoriesLayout, stories);
 
-        BindableLayout.SetItemsSource(StoriesLayout, historias);
-
-        // publicaciones: las mas nuevas primero
-        List<PostItem> lista = new List<PostItem>();
-
-        foreach (Post p in db.Posts.OrderByDescending(p => p.Date).ToList())
-        {
-            PostItem item = new PostItem();
-            item.Id = p.Id;
-            item.Username = p.Username;
-            item.Initial = p.Username.Substring(0, 1).ToUpper();
-            item.TimeAgo = HaceCuanto(p.Date);
-            item.Content = p.Content;
-            item.Likes = p.Likes;
-            item.Liked = likedIds.Contains(p.Id);
-            item.CommentsCount = db.Comments.Count(c => c.PostId == p.Id);
-            lista.Add(item);
-        }
-
-        PostsList.ItemsSource = lista;
-
-        // si no hay publicaciones, se muestra un mensaje amable
-        EmptyPostsLabel.IsVisible = lista.Count == 0;
-    }
-
-    // convierte la fecha en "hace 2 h"
-    static string HaceCuanto(DateTime fecha)
-    {
-        TimeSpan tiempo = DateTime.Now - fecha;
-
-        if (tiempo.TotalMinutes < 1)
-        {
-            return "ahora";
-        }
-        if (tiempo.TotalHours < 1)
-        {
-            return "hace " + (int)tiempo.TotalMinutes + " min";
-        }
-        if (tiempo.TotalDays < 1)
-        {
-            return "hace " + (int)tiempo.TotalHours + " h";
-        }
-        return "hace " + (int)tiempo.TotalDays + " d";
+        // publicaciones: las más nuevas primero
+        PostsList.ItemsSource = db.Posts
+            .OrderByDescending(p => p.Date)
+            .AsEnumerable()
+            .Select(p => new PostItem
+            {
+                Id = p.Id,
+                Username = p.Username,
+                Initial = p.Username.ToInitial(),
+                TimeAgo = p.Date.ToTimeAgo(),
+                Content = p.Content,
+                Likes = p.Likes,
+                Liked = LikeTracker.IsLiked(p.Id)
+            })
+            .ToList();
     }
 
     // dar y quitar me gusta
-    private void Like_Tapped(object sender, TappedEventArgs e)
+    private void Like_Tapped(object? sender, TappedEventArgs e)
     {
-        Label corazon = (Label)sender;
-        PostItem item = (PostItem)corazon.BindingContext;
-
-        if (item.Liked)
+        if (sender is not Label { BindingContext: PostItem item })
         {
-            item.Liked = false;
-            item.Likes--;
-            likedIds.Remove(item.Id);
-        }
-        else
-        {
-            item.Liked = true;
-            item.Likes++;
-            likedIds.Add(item.Id);
+            return;
         }
 
-        // guardar el nuevo numero en la base de datos
-        Post post = db.Posts.Find(item.Id);
+        item.Liked = !item.Liked;
+        item.Likes += item.Liked ? 1 : -1;
+        LikeTracker.Set(item.Id, item.Liked);
 
-        if (post != null)
+        // guardar el nuevo número en la base de datos
+        var post = db.Posts.Find(item.Id);
+
+        if (post is null)
         {
-            post.Likes = item.Likes;
-            db.SaveChanges();
+            return;
         }
+
+        post.Likes = item.Likes;
+        db.SaveChanges();
     }
 
-    // abrir los comentarios de la publicacion
-    private async void Comment_Tapped(object sender, TappedEventArgs e)
-    {
-        Label icono = (Label)sender;
-        PostItem item = (PostItem)icono.BindingContext;
+    // abrir la pantalla de publicar
+    private async void NewPost_Tapped(object? sender, TappedEventArgs e) =>
+        await Shell.Current.GoToAsync(Routes.CreatePost);
 
-        await Shell.Current.GoToAsync($"{nameof(CommentsPage)}?postId={item.Id}");
-    }
-
-    // abrir la pantalla de publicar (por su ruta)
-    private async void NewPost_Tapped(object sender, TappedEventArgs e)
-    {
-        await Shell.Current.GoToAsync("createpost");
-    }
-
-    // cerrar sesion y volver al login
-    private async void Logout_Clicked(object sender, TappedEventArgs e)
-    {
-        Session.CurrentUser = null;
-        likedIds.Clear();
-        await Shell.Current.GoToAsync("//login");
-    }
+    // cerrar sesión y volver al login
+    private async void Logout_Tapped(object? sender, TappedEventArgs e) =>
+        await AuthNavigation.SignOutAsync();
 }
 
 
 // datos de cada historia
-public class StoryItem
+public record StoryItem(string Username, string Initial);
+
+
+// datos de cada publicación tal como se muestra en pantalla
+public class PostItem : BindingUtilObject
 {
-    public string Username { get; set; }
-    public string Initial { get; set; }
-}
+    public int Id { get; init; }
+    public string Username { get; init; } = "";
+    public string Initial { get; init; } = "?";
+    public string TimeAgo { get; init; } = "";
+    public string Content { get; init; } = "";
 
-
-// datos de cada publicacion tal como se muestra en pantalla
-public class PostItem : INotifyPropertyChanged
-{
-    public int Id { get; set; }
-    public string Username { get; set; }
-    public string Initial { get; set; }
-    public string TimeAgo { get; set; }
-    public string Content { get; set; }
-    public int CommentsCount { get; set; }
-
-    int likes;
+    int _likes;
     public int Likes
     {
-        get { return likes; }
-        set
-        {
-            likes = value;
-            OnChanged(nameof(Likes));
-        }
+        get => _likes;
+        set => SetProperty(ref _likes, value);
     }
 
-    bool liked;
+    bool _liked;
     public bool Liked
     {
-        get { return liked; }
+        get => _liked;
         set
         {
-            liked = value;
-            OnChanged(nameof(Heart));
-        }
-    }
-
-    // el corazon cambia segun si ya le diste me gusta
-    public string Heart
-    {
-        get
-        {
-            if (Liked)
+            if (SetProperty(ref _liked, value))
             {
-                return "❤️";
+                RaisePropertyChanged(nameof(Heart));
             }
-            return "🤍";
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    void OnChanged(string nombre)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombre));
-    }
+    // el corazón cambia según si ya le diste me gusta
+    public string Heart => Liked ? "❤️" : "🤍";
 }

@@ -1,76 +1,78 @@
-<?xml version = "1.0" encoding = "UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <Shell
     x:Class="Arkana.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Arkana"
+    xmlns:controls="clr-namespace:Arkana.Controls"
     xmlns:pages="clr-namespace:Arkana.Pages"
     xmlns:info="clr-namespace:Microsoft.Maui.ApplicationModel;assembly=Microsoft.Maui.Essentials"
     Title="Arkana"
     FlyoutBehavior="Flyout"
-    FlyoutBackgroundColor="{StaticResource ArkanaCard}"
-    BackgroundColor="#12040A"
-    TabBarBackgroundColor="#12040A"
-    TabBarTitleColor="#FF1F3D"
-    TabBarUnselectedColor="#8A8A94">
+    FlyoutBackgroundColor="{StaticResource ArkSurface}"
+    BackgroundColor="{StaticResource ArkBackground}"
+    Shell.BackgroundColor="{StaticResource ArkBackground}"
+    Shell.ForegroundColor="{StaticResource ArkTextPrimary}"
+    Shell.TitleColor="{StaticResource ArkTextPrimary}"
+    Shell.TabBarBackgroundColor="{StaticResource ArkBackground}"
+    Shell.TabBarTitleColor="{StaticResource ArkAccent}"
+    Shell.TabBarUnselectedColor="{StaticResource ArkTextMuted}">
 
-    <!--MENU LATERAL-->
+    <!-- ============ MENÚ LATERAL ============ -->
 
     <Shell.FlyoutHeader>
-        <Grid Padding="22,45,22,22" BackgroundColor="{StaticResource ArkanaBg}">
-            <Label FontSize="32" FontAttributes="Bold">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Ark" TextColor="White"/>
-                        <Span Text=".ana" TextColor="{StaticResource ArkanaRed}"/>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+        <Grid Padding="22,45,22,22" BackgroundColor="{StaticResource ArkBackground}">
+            <controls:ArkanaLogo FontSize="32" HorizontalOptions="Start"/>
         </Grid>
     </Shell.FlyoutHeader>
 
     <Shell.FlyoutFooter>
         <VerticalStackLayout Padding="22,15">
-            <Label Text ="{x:Static info:AppInfo.Name}" TextColor="{StaticResource ArkanaMuted}"/>
-            <Label Text="{x:Static info:AppInfo.VersionString}" TextColor="{StaticResource ArkanaMuted}"/>
+            <Label Text="{x:Static info:AppInfo.Name}" Style="{StaticResource Caption}"/>
+            <Label Text="{x:Static info:AppInfo.VersionString}" Style="{StaticResource Caption}"/>
         </VerticalStackLayout>
     </Shell.FlyoutFooter>
 
     <Shell.MenuItemTemplate>
         <DataTemplate>
             <Grid Padding="22,14">
-                <Label Text="{Binding Text}" TextColor="White" FontSize="16" VerticalOptions="Center"/>
+                <Label Text="{Binding Text}" Style="{StaticResource Body}"
+                       FontSize="16" VerticalOptions="Center"/>
             </Grid>
         </DataTemplate>
     </Shell.MenuItemTemplate>
 
-    <!-- pantalla de login -->
-    <ShellContent
-    Title="Login"
-    ContentTemplate="{DataTemplate pages:LoginPage}"
-    Route="login"
-    Shell.NavBarIsVisible="False"
-    Shell.FlyoutBehavior="Disabled"
-    FlyoutItemIsVisible="False"/>
+    <!-- ============ PANTALLAS ============ -->
 
+    <!-- login -->
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate pages:LoginPage}"
+        Route="login"
+        Shell.NavBarIsVisible="False"
+        Shell.FlyoutBehavior="Disabled"
+        FlyoutItemIsVisible="False"/>
+
+    <!-- barra de pestañas -->
     <TabBar Route="main">
 
         <ShellContent
-        Title="🏠 Inicio"
-        ContentTemplate="{DataTemplate pages:HomePage}"
-        Shell.NavBarIsVisible="False"/>
+            Title="🏠 Inicio"
+            ContentTemplate="{DataTemplate pages:HomePage}"
+            Shell.NavBarIsVisible="False"/>
 
         <ShellContent
-        Title="🔍 Buscar"
-        ContentTemplate="{DataTemplate pages:SearchPage}"/>
+            Title="🔍 Buscar"
+            ContentTemplate="{DataTemplate pages:SearchPage}"/>
 
         <ShellContent
-        Title="👤 Perfil"
-        ContentTemplate="{DataTemplate pages:ProfilePage}"/>
+            Title="👤 Perfil"
+            ContentTemplate="{DataTemplate pages:ProfilePage}"/>
 
     </TabBar>
-    <MenuItem Text="Acerca De Arkana" Clicked="About_Clicked"/>
-    <MenuItem Text="Documentacion" Clicked="Docs_Clicked"/>
-    <MenuItem Text="Cerrar Sesion" Clicked="Logout_Clicked"/>
+
+    <!-- opciones del menú lateral -->
+    <MenuItem Text="Acerca de Arkana" Clicked="About_Clicked"/>
+    <MenuItem Text="Documentación" Clicked="Docs_Clicked"/>
+    <MenuItem Text="Cerrar sesión" Clicked="Logout_Clicked"/>
 
 </Shell>

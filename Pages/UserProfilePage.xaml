@@ -2,123 +2,96 @@
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Arkana.Controls"
     x:Class="Arkana.Pages.UserProfilePage"
     Shell.NavBarIsVisible="False"
-    BackgroundColor="#12040A">
+    BackgroundColor="{StaticResource ArkBackground}">
 
-    <Grid>
+    <Grid RowDefinitions="Auto,*">
 
-        <!-- fondo con capa oscura para que todo se lea bien -->
-        <Image Source="descarga.png" Aspect="AspectFill" InputTransparent="True"
-               HorizontalOptions="Fill" VerticalOptions="Fill"/>
-        <BoxView Color="#4D12040A" InputTransparent="True"/>
+        <!-- barra de arriba con flecha para volver -->
+        <Grid Grid.Row="0" ColumnDefinitions="48,*,48" Padding="18,12">
 
-        <Grid RowDefinitions="Auto,*">
+            <Label Text="←" FontSize="26" TextColor="{StaticResource ArkTextPrimary}"
+                   VerticalOptions="Center" AutomationProperties.Name="Volver">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Back_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
 
-            <!-- barra de arriba con flecha para volver -->
-            <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="18,12"
-                  BackgroundColor="#B312040A">
-
-                <Label Text="←" FontSize="26" TextColor="White" VerticalOptions="Center">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="Back_Tapped"/>
-                    </Label.GestureRecognizers>
-                </Label>
-
-                <Label Grid.Column="1" Text="{Binding Handle, Mode=OneWay}" FontSize="18" FontAttributes="Bold"
-                       TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
-
-                <!-- columna vacia para que el titulo quede centrado -->
-                <Label Grid.Column="2" Text="    " FontSize="26"/>
-
-            </Grid>
-
-            <!-- publicaciones del usuario, con el perfil arriba -->
-            <CollectionView Grid.Row="1" SelectionMode="None"
-                            ItemsSource="{Binding Posts, Mode=OneWay}">
-
-                <CollectionView.Header>
-                    <VerticalStackLayout Padding="18,15,18,10" Spacing="10">
-
-                        <Border StrokeShape="RoundRectangle 45" Stroke="#FF1F3D" StrokeThickness="3"
-                                WidthRequest="90" HeightRequest="90" BackgroundColor="#3A1623"
-                                HorizontalOptions="Center">
-                            <Label Text="{Binding Initial, Mode=OneWay}" FontSize="38" FontAttributes="Bold"
-                                   TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
-                        </Border>
-
-                        <Label Text="{Binding Name, Mode=OneWay}" FontSize="22" FontAttributes="Bold"
-                               TextColor="White" HorizontalOptions="Center"/>
-
-                        <!-- numeros -->
-                        <Border BackgroundColor="#CC240E18" Stroke="#40E0A8B0" StrokeThickness="1"
-                                StrokeShape="RoundRectangle 18" Padding="10,16" Margin="0,10">
-                            <Grid ColumnDefinitions="*,Auto,*,Auto,*">
-
-                                <VerticalStackLayout Grid.Column="0">
-                                    <Label Text="{Binding PostsCount, Mode=OneWay}" FontSize="20" FontAttributes="Bold"
-                                           TextColor="White" HorizontalOptions="Center"/>
-                                    <Label Text="Publicaciones" FontSize="12" TextColor="#CDB4BA" HorizontalOptions="Center"/>
-                                </VerticalStackLayout>
-
-                                <BoxView Grid.Column="1" WidthRequest="1" Color="#40E0A8B0"/>
-
-                                <VerticalStackLayout Grid.Column="2">
-                                    <Label Text="{Binding FollowersCount, Mode=OneWay}" FontSize="20" FontAttributes="Bold"
-                                           TextColor="White" HorizontalOptions="Center"/>
-                                    <Label Text="Seguidores" FontSize="12" TextColor="#CDB4BA" HorizontalOptions="Center"/>
-                                </VerticalStackLayout>
-
-                                <BoxView Grid.Column="3" WidthRequest="1" Color="#40E0A8B0"/>
-
-                                <VerticalStackLayout Grid.Column="4">
-                                    <Label Text="{Binding FollowingCount, Mode=OneWay}" FontSize="20" FontAttributes="Bold"
-                                           TextColor="White" HorizontalOptions="Center"/>
-                                    <Label Text="Siguiendo" FontSize="12" TextColor="#CDB4BA" HorizontalOptions="Center"/>
-                                </VerticalStackLayout>
-
-                            </Grid>
-                        </Border>
-
-                        <!-- boton seguir (no sale en tu propio perfil) -->
-                        <Button Text="{Binding ButtonText, Mode=OneWay}"
-                                BackgroundColor="{Binding ButtonColor, Mode=OneWay}"
-                                TextColor="{Binding ButtonTextColor, Mode=OneWay}"
-                                IsVisible="{Binding IsOtherUser, Mode=OneWay}"
-                                BorderColor="#FF1F3D" BorderWidth="1"
-                                FontAttributes="Bold" CornerRadius="22" HeightRequest="44"
-                                Clicked="Follow_Clicked"/>
-
-                        <Label Text="Publicaciones" FontSize="16" FontAttributes="Bold"
-                               TextColor="White" Margin="0,10,0,0"/>
-
-                        <Label Text="Todavía no tiene publicaciones" FontSize="13" TextColor="#CDB4BA"
-                               IsVisible="{Binding HasNoPosts, Mode=OneWay}"/>
-
-                    </VerticalStackLayout>
-                </CollectionView.Header>
-
-                <!-- como se ve cada publicacion -->
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border BackgroundColor="#CC240E18" Stroke="#40E0A8B0" StrokeThickness="1"
-                                StrokeShape="RoundRectangle 18" Padding="16" Margin="14,6">
-                            <VerticalStackLayout Spacing="8">
-                                <Label Text="{Binding Content}" TextColor="White" FontSize="15" LineHeight="1.2"/>
-                                <HorizontalStackLayout Spacing="14">
-                                    <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
-                                           TextColor="#CDB4BA" FontSize="12"/>
-                                    <Label Text="{Binding Likes, StringFormat='❤️ {0}'}"
-                                           TextColor="#E6D5D9" FontSize="12"/>
-                                </HorizontalStackLayout>
-                            </VerticalStackLayout>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-
-            </CollectionView>
+            <Label Grid.Column="1" Text="{Binding Handle, Mode=OneWay}" Style="{StaticResource Heading}"
+                   FontSize="18" HorizontalOptions="Center" VerticalOptions="Center"/>
 
         </Grid>
+
+        <!-- publicaciones del usuario, con el perfil arriba -->
+        <CollectionView Grid.Row="1" SelectionMode="None"
+                        ItemsSource="{Binding Posts, Mode=OneWay}">
+
+            <CollectionView.Header>
+                <VerticalStackLayout Padding="18,5,18,10" Spacing="10">
+
+                    <controls:Avatar Diameter="90" Initial="{Binding Initial, Mode=OneWay}"
+                                     HorizontalOptions="Center"/>
+
+                    <Label Text="{Binding Name, Mode=OneWay}" Style="{StaticResource Heading}"
+                           HorizontalOptions="Center"/>
+
+                    <!-- números -->
+                    <Grid ColumnDefinitions="*,*,*" Margin="0,10">
+
+                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="{Binding PostsCount, Mode=OneWay}" Style="{StaticResource StatValue}"/>
+                            <Label Text="Publicaciones" Style="{StaticResource StatCaption}"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="{Binding FollowersCount, Mode=OneWay}" Style="{StaticResource StatValue}"/>
+                            <Label Text="Seguidores" Style="{StaticResource StatCaption}"/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Column="2" Spacing="2">
+                            <Label Text="{Binding FollowingCount, Mode=OneWay}" Style="{StaticResource StatValue}"/>
+                            <Label Text="Siguiendo" Style="{StaticResource StatCaption}"/>
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+                    <!-- botón seguir (no sale en tu propio perfil) -->
+                    <Button Text="{Binding FollowText, Mode=OneWay}"
+                            Style="{StaticResource FollowButton}"
+                            IsVisible="{Binding IsOtherUser, Mode=OneWay}"
+                            CornerRadius="22" HeightRequest="44"
+                            Clicked="Follow_Clicked"/>
+
+                    <Label Text="Publicaciones" Style="{StaticResource Body}"
+                           FontSize="16" FontAttributes="Bold" Margin="0,10,0,0"/>
+
+                    <Label Text="Todavía no tiene publicaciones" Style="{StaticResource Subheading}"
+                           FontSize="13" IsVisible="{Binding HasNoPosts, Mode=OneWay}"/>
+
+                </VerticalStackLayout>
+            </CollectionView.Header>
+
+            <!-- cómo se ve cada publicación -->
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource Card}" Margin="14,6">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="{Binding Content}" Style="{StaticResource Body}"/>
+                            <HorizontalStackLayout Spacing="14">
+                                <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"
+                                       Style="{StaticResource Caption}"/>
+                                <Label Text="{Binding Likes, StringFormat='❤️ {0}'}"
+                                       Style="{StaticResource Caption}"
+                                       TextColor="{StaticResource ArkTextSecondary}"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
 
     </Grid>
 

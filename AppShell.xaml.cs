@@ -1,38 +1,38 @@
-﻿using Arkana.Pages;
+﻿using Arkana.Helpers;
+using Arkana.Pages;
 using Arkana.Services;
 
 namespace Arkana;
 
 public partial class AppShell : Shell
 {
+    const string DocsUrl = "https://learn.microsoft.com/es-es/dotnet/maui/";
+
     public AppShell()
     {
         InitializeComponent();
 
-        // rutas para abrir paginas por nombre
-        Routing.RegisterRoute("register", typeof(RegisterPage));
-        Routing.RegisterRoute("createpost", typeof(CreatePostPage));
-        Routing.RegisterRoute(nameof(UserProfilePage), typeof(UserProfilePage));
-        Routing.RegisterRoute(nameof(CommentsPage), typeof(CommentsPage));
+        // rutas para abrir páginas por nombre
+        Routing.RegisterRoute(Routes.Register, typeof(RegisterPage));
+        Routing.RegisterRoute(Routes.CreatePost, typeof(CreatePostPage));
+        Routing.RegisterRoute(Routes.UserProfile, typeof(UserProfilePage));
     }
 
-    private async void About_Clicked(object sender, EventArgs e)
+    private async void About_Clicked(object? sender, EventArgs e)
     {
         FlyoutIsPresented = false;
         await DisplayAlert("Acerca de", $"{AppInfo.Name} {AppInfo.VersionString}", "Aceptar");
     }
 
-    private async void Docs_Clicked(object sender, EventArgs e)
+    private async void Docs_Clicked(object? sender, EventArgs e)
     {
         FlyoutIsPresented = false;
-        var uri = new Uri("https://learn.microsoft.com/es-es/dotnet/maui/");
-        await Browser.Default.OpenAsync(uri, BrowserLaunchMode.SystemPreferred);
+        await Browser.Default.OpenAsync(new Uri(DocsUrl), BrowserLaunchMode.SystemPreferred);
     }
 
-    private async void Logout_Clicked(object sender, EventArgs e)
+    private async void Logout_Clicked(object? sender, EventArgs e)
     {
-        Session.CurrentUser = null;
         FlyoutIsPresented = false;
-        await GoToAsync("//login");
+        await AuthNavigation.SignOutAsync();
     }
 }

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Arkana.Resources.Styles.ArkanaTheme">
+
+    <!-- ============ PALETA ============ -->
+    <Color x:Key="ArkBackground">#0A0A0F</Color>
+    <Color x:Key="ArkSurface">#14141A</Color>
+    <Color x:Key="ArkSurfaceRaised">#1F1F28</Color>
+    <Color x:Key="ArkBorder">#2A2A33</Color>
+    <Color x:Key="ArkBorderSubtle">#22222B</Color>
+    <Color x:Key="ArkAccent">#FF1F3D</Color>
+    <Color x:Key="ArkTextPrimary">#FFFFFF</Color>
+    <Color x:Key="ArkTextSecondary">#CCCCCC</Color>
+    <Color x:Key="ArkTextMuted">#9A9AA5</Color>
+    <Color x:Key="ArkTextHint">#6B6B76</Color>
+    <Color x:Key="ArkGlass">#CC0A0A0F</Color>
+
+    <!-- ============ TEXTOS ============ -->
+    <Style x:Key="Heading" TargetType="Label">
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextPrimary}"/>
+    </Style>
+
+    <Style x:Key="Subheading" TargetType="Label">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextMuted}"/>
+    </Style>
+
+    <Style x:Key="Body" TargetType="Label">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextPrimary}"/>
+    </Style>
+
+    <Style x:Key="Caption" TargetType="Label">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextMuted}"/>
+    </Style>
+
+    <Style x:Key="StoryName" TargetType="Label">
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextPrimary}"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="LineBreakMode" Value="TailTruncation"/>
+    </Style>
+
+    <Style x:Key="StatValue" TargetType="Label">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextPrimary}"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+    </Style>
+
+    <Style x:Key="StatCaption" TargetType="Label">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextMuted}"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+    </Style>
+
+    <!-- ============ CONTENEDORES ============ -->
+    <Style x:Key="Card" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource ArkSurface}"/>
+        <Setter Property="Stroke" Value="{StaticResource ArkBorderSubtle}"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 16"/>
+        <Setter Property="Padding" Value="14"/>
+    </Style>
+
+    <Style x:Key="GlassCard" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource ArkGlass}"/>
+        <Setter Property="Stroke" Value="{StaticResource ArkBorder}"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 24"/>
+        <Setter Property="Padding" Value="22"/>
+    </Style>
+
+    <!-- ============ FORMULARIOS ============ -->
+    <Style x:Key="FieldBox" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource ArkSurface}"/>
+        <Setter Property="Stroke" Value="{StaticResource ArkBorder}"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+        <Setter Property="Padding" Value="14,0"/>
+    </Style>
+
+    <Style x:Key="FieldEntry" TargetType="Entry">
+        <Setter Property="PlaceholderColor" Value="{StaticResource ArkTextHint}"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextPrimary}"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="HeightRequest" Value="50"/>
+    </Style>
+
+    <Style x:Key="ChipBorder" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource ArkSurface}"/>
+        <Setter Property="Stroke" Value="{StaticResource ArkBorder}"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 18"/>
+        <Setter Property="Padding" Value="18,8"/>
+    </Style>
+
+    <!-- ============ BOTONES ============ -->
+    <Style x:Key="PrimaryButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource ArkAccent}"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextPrimary}"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="HeightRequest" Value="50"/>
+        <Setter Property="CornerRadius" Value="25"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.4"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!-- "Seguir" (rojo) / "Siguiendo" (oscuro): cambia solo según IsFollowing -->
+    <Style x:Key="FollowButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource ArkAccent}"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextPrimary}"/>
+        <Setter Property="BorderColor" Value="{StaticResource ArkAccent}"/>
+        <Setter Property="BorderWidth" Value="1"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="CornerRadius" Value="18"/>
+        <Setter Property="HeightRequest" Value="36"/>
+        <Setter Property="Padding" Value="16,0"/>
+        <Style.Triggers>
+            <DataTrigger TargetType="Button" Binding="{Binding IsFollowing}" Value="True">
+                <Setter Property="BackgroundColor" Value="{StaticResource ArkSurface}"/>
+                <Setter Property="TextColor" Value="{StaticResource ArkTextMuted}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>

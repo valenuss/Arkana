@@ -1,41 +1,41 @@
 ﻿using Arkana.Data;
 using Arkana.Pages;
-using IconFont.Maui.FontAwesome;
-using Microsoft.Extensions.DependencyInjection;
+using Arkana.Services;
 using Microsoft.Extensions.Logging;
 
-namespace Arkana
+namespace Arkana;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .UseFontAwesome()   // registra la fuente de los íconos
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+        var builder = MauiApp.CreateBuilder();
 
-            // base de datos: una sola instancia accesible desde toda la app
-            builder.Services.AddSingleton<AppDbContext>();
+        builder
+            .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
 
-            // paginas (reciben el AppDbContext en su constructor)
-            builder.Services.AddTransient<LoginPage>();
-            builder.Services.AddTransient<RegisterPage>();
-            builder.Services.AddTransient<HomePage>();
-            builder.Services.AddTransient<SearchPage>();
-            builder.Services.AddTransient<ProfilePage>();
-            builder.Services.AddTransient<CreatePostPage>();
-            builder.Services.AddTransient<CommentsPage>();
+        // base de datos y servicios: una sola instancia para toda la app
+        builder.Services.AddSingleton<AppDbContext>();
+        builder.Services.AddSingleton<FollowService>();
+
+        // páginas (reciben sus dependencias en el constructor)
+        builder.Services.AddTransient<LoginPage>();
+        builder.Services.AddTransient<RegisterPage>();
+        builder.Services.AddTransient<HomePage>();
+        builder.Services.AddTransient<SearchPage>();
+        builder.Services.AddTransient<ProfilePage>();
+        builder.Services.AddTransient<CreatePostPage>();
+        builder.Services.AddTransient<UserProfilePage>();
 
 #if DEBUG
-            builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
-            return builder.Build();
-        }
+
+        return builder.Build();
     }
 }

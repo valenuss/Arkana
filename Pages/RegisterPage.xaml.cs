@@ -13,44 +13,21 @@ public partial class RegisterPage : ContentPage
         this.db = db;
     }
 
-    // boton de crear cuenta
-    private async void RegisterButton_Clicked(object sender, EventArgs e)
+    // botón de crear cuenta
+    private async void RegisterButton_Clicked(object? sender, EventArgs e)
     {
-        // sacar lo que escribieron (sin espacios de mas al inicio o al final)
-        string name = (NameEntry.Text ?? "").Trim();
-        string username = (UsernameEntry.Text ?? "").Trim();
-        string email = (EmailEntry.Text ?? "").Trim();
-        string password = PasswordEntry.Text ?? "";
-        string confirmPassword = ConfirmPasswordEntry.Text ?? "";
+        var name = NameEntry.Text?.Trim();
+        var username = UsernameEntry.Text?.Trim();
+        var email = EmailEntry.Text?.Trim();
+        var password = PasswordEntry.Text;
+        var confirmPassword = ConfirmPasswordEntry.Text;
 
-        // que no falte ningun campo
-        if (name == "" || username == "" || email == "" ||
-            string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
+        // que no falte ningún campo
+        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(username) ||
+            string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) ||
+            string.IsNullOrWhiteSpace(confirmPassword))
         {
             await DisplayAlert("Error", "Debes llenar todos los campos.", "Aceptar");
-            return;
-        }
-
-        // el nombre de usuario: minimo 3 letras y sin espacios
-        if (username.Length < 3 || username.Contains(" "))
-        {
-            await DisplayAlert("Error", "El usuario debe tener al menos 3 caracteres y no puede llevar espacios.", "Aceptar");
-            return;
-        }
-
-        // el correo tiene que verse como un correo
-        bool correoValido = email.Contains("@") && email.Contains(".") && !email.Contains(" ");
-
-        if (correoValido == false)
-        {
-            await DisplayAlert("Error", "Escribe un correo válido, por ejemplo nombre@correo.com.", "Aceptar");
-            return;
-        }
-
-        // la contraseña tiene que tener un minimo
-        if (password.Length < 6)
-        {
-            await DisplayAlert("Error", "La contraseña debe tener al menos 6 caracteres.", "Aceptar");
             return;
         }
 
@@ -61,34 +38,28 @@ public partial class RegisterPage : ContentPage
             return;
         }
 
-        // revisar que el correo o el usuario no existan
-        bool existe = db.Users.Any(u => u.Email == email || u.Username == username);
-
-        if (existe)
+        // que el correo o el usuario no existan ya
+        if (db.Users.Any(u => u.Email == email || u.Username == username))
         {
             await DisplayAlert("Error", "El correo o el nombre de usuario ya existe.", "Aceptar");
             return;
         }
 
-        // crear el usuario nuevo y guardarlo
-        User usuario = new User();
-        usuario.Name = name;
-        usuario.Username = username;
-        usuario.Email = email;
-        usuario.Password = password;
-
-        db.Users.Add(usuario);
+        db.Users.Add(new User
+        {
+            Name = name,
+            Username = username,
+            Email = email,
+            Password = password
+        });
         db.SaveChanges();
 
         await DisplayAlert("Arkana", "Cuenta creada correctamente.", "Aceptar");
-
-        // volver al login
-        await Navigation.PopAsync();
+        await GoBackAsync();
     }
 
-    // tocar "Inicia sesion" para volver
-    private async void Login_Tapped(object sender, TappedEventArgs e)
-    {
-        await Navigation.PopAsync();
-    }
+    // tocar "Inicia sesión" para volver
+    private async void Login_Tapped(object? sender, TappedEventArgs e) => await GoBackAsync();
+
+    static Task GoBackAsync() => Shell.Current.GoToAsync("..");
 }
