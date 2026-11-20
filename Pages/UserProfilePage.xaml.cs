@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Arkana.Data;
+using Arkana.Helpers;
 using Arkana.Models;
 using Arkana.Services;
 
@@ -9,216 +10,170 @@ public partial class UserProfilePage : ContentPage, IQueryAttributable
 {
     readonly UserProfileData data;
 
-    public UserProfilePage(AppDbContext db)
+    public UserProfilePage(AppDbContext db, FollowService follows)
     {
         InitializeComponent();
 
-        data = new UserProfileData(db);
+        data = new UserProfileData(db, follows);
         BindingContext = data;
     }
 
-    // recibe el parametro de la ruta: UserProfilePage?id=3
+    // recibe el parámetro de la ruta: userprofile?id=3
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
-        int id = Convert.ToInt32(query["id"]);
-        data.Load(id);
+        if (query.TryGetValue("id", out var id))
+        {
+            data.Load(Convert.ToInt32(id));
+        }
     }
 
     // volver a la pantalla anterior
-    private async void Back_Tapped(object sender, TappedEventArgs e)
-    {
+    private async void Back_Tapped(object? sender, TappedEventArgs e) =>
         await Shell.Current.GoToAsync("..");
-    }
 
     // seguir o dejar de seguir
-    private void Follow_Clicked(object sender, EventArgs e)
-    {
-        data.ToggleFollow();
-    }
+    private void Follow_Clicked(object? sender, EventArgs e) => data.ToggleFollow();
 }
 
 
-// clase de datos del perfil de otro usuario
+// datos del perfil de otro usuario
 public class UserProfileData : BindingUtilObject
 {
     readonly AppDbContext db;
+    readonly FollowService follows;
     int userId;
 
-    public UserProfileData(AppDbContext db)
+    public UserProfileData(AppDbContext db, FollowService follows)
     {
         this.db = db;
+        this.follows = follows;
     }
 
     string _name = "";
     public string Name
     {
-        get { return _name; }
-        set { SetProperty(ref _name, value); }
+        get => _name;
+        set => SetProperty(ref _name, value);
     }
 
     string _handle = "";
     public string Handle
     {
-        get { return _handle; }
-        set { SetProperty(ref _handle, value); }
+        get => _handle;
+        set => SetProperty(ref _handle, value);
     }
 
-    string _initial = "";
+    string _initial = "?";
     public string Initial
     {
-        get { return _initial; }
-        set { SetProperty(ref _initial, value); }
+        get => _initial;
+        set => SetProperty(ref _initial, value);
     }
 
     string _postsCount = "0";
     public string PostsCount
     {
-        get { return _postsCount; }
-        set { SetProperty(ref _postsCount, value); }
+        get => _postsCount;
+        set => SetProperty(ref _postsCount, value);
     }
 
     string _followersCount = "0";
     public string FollowersCount
     {
-        get { return _followersCount; }
-        set { SetProperty(ref _followersCount, value); }
+        get => _followersCount;
+        set => SetProperty(ref _followersCount, value);
     }
 
     string _followingCount = "0";
     public string FollowingCount
     {
-        get { return _followingCount; }
-        set { SetProperty(ref _followingCount, value); }
+        get => _followingCount;
+        set => SetProperty(ref _followingCount, value);
     }
 
-    string _buttonText = "Seguir";
-    public string ButtonText
+    // el botón cambia de aspecto solo (ver estilo FollowButton)
+    bool _isFollowing;
+    public bool IsFollowing
     {
-        get { return _buttonText; }
-        set { SetProperty(ref _buttonText, value); }
+        get => _isFollowing;
+        set
+        {
+            if (SetProperty(ref _isFollowing, value))
+            {
+                RaisePropertyChanged(nameof(FollowText));
+            }
+        }
     }
 
-    Color _buttonColor = Color.FromArgb("#FF1F3D");
-    public Color ButtonColor
-    {
-        get { return _buttonColor; }
-        set { SetProperty(ref _buttonColor, value); }
-    }
+    public string FollowText => IsFollowing ? "Siguiendo" : "Seguir";
 
-    Color _buttonTextColor = Colors.White;
-    public Color ButtonTextColor
-    {
-        get { return _buttonTextColor; }
-        set { SetProperty(ref _buttonTextColor, value); }
-    }
-
-    // el boton seguir no sale en tu propio perfil
+    // el botón seguir no sale en tu propio perfil
     bool _isOtherUser;
     public bool IsOtherUser
     {
-        get { return _isOtherUser; }
-        set { SetProperty(ref _isOtherUser, value); }
+        get => _isOtherUser;
+        set => SetProperty(ref _isOtherUser, value);
     }
 
     bool _hasNoPosts;
     public bool HasNoPosts
     {
-        get { return _hasNoPosts; }
-        set { SetProperty(ref _hasNoPosts, value); }
+        get => _hasNoPosts;
+        set => SetProperty(ref _hasNoPosts, value);
     }
 
     // publicaciones del usuario
-    ObservableCollection<Post> _posts = new ObservableCollection<Post>();
+    ObservableCollection<Post> _posts = new();
     public ObservableCollection<Post> Posts
     {
-        get { return _posts; }
-        set { SetProperty(ref _posts, value); }
+        get => _posts;
+        set => SetProperty(ref _posts, value);
     }
 
     // carga todos los datos del usuario
     public void Load(int id)
     {
-        userId = id;
+        var user = db.Users.FirstOrDefault(u => u.Id == id);
 
-        User? u = db.Users.FirstOrDefault(x => x.Id == id);
-
-        if (u == null)
+        if (user is null)
         {
             return;
         }
 
-        Name = u.Name;
-        Handle = "@" + u.Username;
-        Initial = u.Username.Substring(0, 1).ToUpper();
+        userId = id;
 
-        PostsCount = db.Posts.Count(p => p.UserId == id).ToString();
-        FollowersCount = db.Follows.Count(f => f.FollowingId == id).ToString();
-        FollowingCount = db.Follows.Count(f => f.FollowerId == id).ToString();
+        Name = user.Name;
+        Handle = "@" + user.Username;
+        Initial = user.Username.ToInitial();
 
-        List<Post> publicaciones = db.Posts
+        var posts = db.Posts
             .Where(p => p.UserId == id)
             .OrderByDescending(p => p.Date)
             .ToList();
 
-        Posts = new ObservableCollection<Post>(publicaciones);
-        HasNoPosts = publicaciones.Count == 0;
+        Posts = new ObservableCollection<Post>(posts);
+        HasNoPosts = posts.Count == 0;
 
-        User? actual = Session.CurrentUser;
-        IsOtherUser = actual != null && actual.Id != id;
+        PostsCount = posts.Count.ToString();
+        FollowersCount = follows.CountFollowers(id).ToString();
+        FollowingCount = follows.CountFollowing(id).ToString();
 
-        ActualizarBoton();
-    }
-
-    // cambia el boton segun si ya lo sigo o no
-    void ActualizarBoton()
-    {
-        User? actual = Session.CurrentUser;
-
-        bool losSigo = actual != null &&
-            db.Follows.Any(f => f.FollowerId == actual.Id && f.FollowingId == userId);
-
-        if (losSigo)
-        {
-            ButtonText = "Siguiendo";
-            ButtonColor = Color.FromArgb("#14141A");
-            ButtonTextColor = Color.FromArgb("#9A9AA5");
-        }
-        else
-        {
-            ButtonText = "Seguir";
-            ButtonColor = Color.FromArgb("#FF1F3D");
-            ButtonTextColor = Colors.White;
-        }
+        var current = Session.CurrentUser;
+        IsOtherUser = current is not null && current.Id != id;
+        IsFollowing = current is not null && follows.IsFollowing(current.Id, id);
     }
 
     // seguir o dejar de seguir
     public void ToggleFollow()
     {
-        User? actual = Session.CurrentUser;
-
-        if (actual == null)
+        if (Session.CurrentUser is not { } current)
         {
             return;
         }
 
-        Follow? existente = db.Follows.FirstOrDefault(f =>
-            f.FollowerId == actual.Id && f.FollowingId == userId);
+        follows.Toggle(current.Id, userId);
 
-        if (existente != null)
-        {
-            db.Follows.Remove(existente);
-        }
-        else
-        {
-            Follow nuevo = new Follow();
-            nuevo.FollowerId = actual.Id;
-            nuevo.FollowingId = userId;
-            db.Follows.Add(nuevo);
-        }
-
-        db.SaveChanges();
-
-        // recargar para actualizar los numeros y el boton
+        // recargar para actualizar los números y el botón
         Load(userId);
     }
 }
