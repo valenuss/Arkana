@@ -7,11 +7,13 @@ namespace Arkana.Pages;
 public partial class HomePage : ContentPage
 {
     readonly AppDbContext db;
+    readonly NotificationService notifications;
 
-    public HomePage(AppDbContext db)
+    public HomePage(AppDbContext db, NotificationService notifications)
     {
         InitializeComponent();
         this.db = db;
+        this.notifications = notifications;
     }
 
     // cada vez que se muestra el inicio, se cargan los datos
@@ -28,6 +30,9 @@ public partial class HomePage : ContentPage
         var initial = current.Username.ToInitial();
         StoryAvatar.Initial = initial;
         ComposerAvatar.Initial = initial;
+
+        // contador de la campanita
+        UpdateBellBadge(current.Id);
 
         // historias: los demás usuarios
         var stories = db.Users
@@ -55,6 +60,15 @@ public partial class HomePage : ContentPage
                 Liked = LikeTracker.IsLiked(p.Id)
             })
             .ToList();
+    }
+
+    // muestra cuántas notificaciones nuevas hay
+    void UpdateBellBadge(int userId)
+    {
+        var unread = notifications.GetUnreadCount(userId);
+
+        BellBadge.IsVisible = unread > 0;
+        BellBadgeLabel.Text = unread > 9 ? "9+" : unread.ToString();
     }
 
     // dar y quitar me gusta (con animación de latido)
@@ -91,6 +105,10 @@ public partial class HomePage : ContentPage
     private async void Search_Tapped(object? sender, TappedEventArgs e) =>
         await Shell.Current.GoToAsync("//main/search");
 
+    // la campanita abre las notificaciones
+    private async void Bell_Tapped(object? sender, TappedEventArgs e) =>
+        await Shell.Current.GoToAsync(Routes.Notifications);
+
     // cerrar sesión y volver al login
     private async void Logout_Tapped(object? sender, TappedEventArgs e) =>
         await AuthNavigation.SignOutAsync();
@@ -117,5 +135,5 @@ public partial class HomePage : ContentPage
             Title = "Compartir publicación",
             Text = $"@{item.Username} en Arkana: {item.Content}"
         });
-    } 
+    }
 }

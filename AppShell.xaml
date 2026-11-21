@@ -4,9 +4,10 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Arkana.Controls"
+    xmlns:helpers="clr-namespace:Arkana.Helpers"
     xmlns:pages="clr-namespace:Arkana.Pages"
     xmlns:info="clr-namespace:Microsoft.Maui.ApplicationModel;assembly=Microsoft.Maui.Essentials"
-     Title="Arkana"
+    Title="Arkana"
     FlyoutBehavior="Flyout"
     FlyoutBackgroundColor="{StaticResource ArkSurface}"
     Shell.BackgroundColor="{StaticResource ArkBackground}"
@@ -54,18 +55,34 @@
     <!-- barra de pestañas -->
     <TabBar Route="main">
 
-        <ShellContent
-            Title="🏠 Inicio"
-            ContentTemplate="{DataTemplate pages:HomePage}"
-            Shell.NavBarIsVisible="False"/>
+        <ShellContent Title="Inicio"
+                      ContentTemplate="{DataTemplate pages:HomePage}"
+                      Shell.NavBarIsVisible="False">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="MaterialIcons"
+                                 Glyph="{x:Static helpers:Icons.Home}"
+                                 Size="24" Color="{StaticResource ArkTextMuted}"/>
+            </ShellContent.Icon>
+        </ShellContent>
 
-        <ShellContent Title="🔍 Buscar"
-              Route="search"
-              ContentTemplate="{DataTemplate pages:SearchPage}"/>
+        <ShellContent Title="Buscar"
+                      Route="search"
+                      ContentTemplate="{DataTemplate pages:SearchPage}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="MaterialIcons"
+                                 Glyph="{x:Static helpers:Icons.Search}"
+                                 Size="24" Color="{StaticResource ArkTextMuted}"/>
+            </ShellContent.Icon>
+        </ShellContent>
 
-        <ShellContent
-            Title="👤 Perfil"
-            ContentTemplate="{DataTemplate pages:ProfilePage}"/>
+        <ShellContent Title="Perfil"
+                      ContentTemplate="{DataTemplate pages:ProfilePage}">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="MaterialIcons"
+                                 Glyph="{x:Static helpers:Icons.Person}"
+                                 Size="24" Color="{StaticResource ArkTextMuted}"/>
+            </ShellContent.Icon>
+        </ShellContent>
 
     </TabBar>
 

@@ -21,13 +21,25 @@
                     <TapGestureRecognizer Tapped="Search_Tapped"/>
                 </Label.GestureRecognizers>
             </Label>
-            <Label Grid.Column="2" Text="{x:Static helpers:Icons.Notifications}"
-       Style="{StaticResource IconLabel}"
-       AutomationProperties.Name="Notificaciones">
-                <Label.GestureRecognizers>
+
+            <!-- campanita con contador -->
+            <Grid Grid.Column="2" AutomationProperties.Name="Notificaciones">
+                <Label Text="{x:Static helpers:Icons.Notifications}" Style="{StaticResource IconLabel}"/>
+
+                <Border x:Name="BellBadge" IsVisible="False"
+            BackgroundColor="{StaticResource ArkAccent}" StrokeThickness="0"
+            StrokeShape="RoundRectangle 9"
+            MinimumWidthRequest="18" HeightRequest="18" Padding="4,0"
+            HorizontalOptions="End" VerticalOptions="Start" Margin="0,-4,-6,0">
+                    <Label x:Name="BellBadgeLabel" Text="0" FontSize="10" FontAttributes="Bold"
+               TextColor="{StaticResource ArkTextPrimary}"
+               HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
+
+                <Grid.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Bell_Tapped"/>
-                </Label.GestureRecognizers>
-            </Label>
+                </Grid.GestureRecognizers>
+            </Grid>
 
             <!-- cerrar sesión -->
             <Label Grid.Column="3" Text="{x:Static helpers:Icons.Logout}"

@@ -10,10 +10,21 @@ public class AppDbContext : DbContext
     public DbSet<Follow> Follows { get; set; }
     public DbSet<Comment> Comments { get; set; }
 
-    // base de datos en memoria (se borra cuando cierras la app)
+    // ruta del archivo de la base de datos (queda guardado en el dispositivo)
+    public static string DbPath =>
+        Path.Combine(FileSystem.AppDataDirectory, "arkana.db3");
+
+    public AppDbContext()
+    {
+        // crea el archivo y las tablas la primera vez; los datos de ejemplo se insertan una sola vez
+        Database.EnsureCreated();
+        System.Diagnostics.Debug.WriteLine($"=== BD: {DbPath}");
+    }
+
+    // base de datos SQLite (los datos se conservan al cerrar la app)
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseInMemoryDatabase("ArkanaDB", root);
+        optionsBuilder.UseSqlite($"Data Source={DbPath}");
     }
 
     // datos de ejemplo

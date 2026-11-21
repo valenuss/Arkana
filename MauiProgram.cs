@@ -23,6 +23,7 @@ public static class MauiProgram
         // base de datos y servicios: una sola instancia para toda la app
         builder.Services.AddSingleton<AppDbContext>();
         builder.Services.AddSingleton<FollowService>();
+        builder.Services.AddSingleton<NotificationService>();
 
         // páginas (reciben sus dependencias en el constructor)
         builder.Services.AddTransient<LoginPage>();
