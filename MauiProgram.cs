@@ -17,6 +17,7 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIcons");
             });
 
         // base de datos y servicios: una sola instancia para toda la app
@@ -31,6 +32,8 @@ public static class MauiProgram
         builder.Services.AddTransient<ProfilePage>();
         builder.Services.AddTransient<CreatePostPage>();
         builder.Services.AddTransient<UserProfilePage>();
+        builder.Services.AddTransient<CommentsPage>();
+        builder.Services.AddTransient<NotificationsPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

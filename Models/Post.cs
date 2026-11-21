@@ -8,4 +8,5 @@ public class Post
     public string Content { get; set; }
     public DateTime Date { get; set; }
     public int Likes { get; set; }
+    public string? ImagePath { get; set; }  
 }

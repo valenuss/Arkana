@@ -11,6 +11,9 @@ public partial class CreatePostPage : ContentPage
 
     readonly AppDbContext db;
 
+    // ruta de la foto elegida (null si no hay)
+    string? selectedImagePath;
+
     public CreatePostPage(AppDbContext db)
     {
         InitializeComponent();
@@ -30,15 +33,69 @@ public partial class CreatePostPage : ContentPage
         }
 
         ContentEditor.Text = string.Empty;
-        PublishButton.IsEnabled = false;
+        ClearPhoto();
+        UpdatePublishState();
     }
 
-    // actualizar el contador y habilitar "Publicar" solo si hay texto
+    // se puede publicar si hay texto o una foto
+    void UpdatePublishState() =>
+        PublishButton.IsEnabled =
+            !string.IsNullOrWhiteSpace(ContentEditor.Text) || selectedImagePath is not null;
+
+    void ClearPhoto()
+    {
+        selectedImagePath = null;
+        PreviewImage.Source = null;
+        PreviewContainer.IsVisible = false;
+    }
+
+    // actualizar el contador
     private void ContentEditor_TextChanged(object? sender, TextChangedEventArgs e)
     {
         var length = e.NewTextValue?.Length ?? 0;
         CounterLabel.Text = $"{length} / {MaxLength}";
-        PublishButton.IsEnabled = !string.IsNullOrWhiteSpace(e.NewTextValue);
+        UpdatePublishState();
+    }
+
+    // elegir una foto de la galería
+    private async void PickPhoto_Tapped(object? sender, TappedEventArgs e)
+    {
+        try
+        {
+            var file = await MediaPicker.Default.PickPhotoAsync();
+
+            if (file is null)
+            {
+                return;
+            }
+
+            // copiar la foto a la carpeta de la app para no perderla
+            var path = Path.Combine(
+                FileSystem.AppDataDirectory,
+                $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}");
+
+            using (var source = await file.OpenReadAsync())
+            using (var target = File.Create(path))
+            {
+                await source.CopyToAsync(target);
+            }
+
+            selectedImagePath = path;
+            PreviewImage.Source = ImageSource.FromFile(path);
+            PreviewContainer.IsVisible = true;
+            UpdatePublishState();
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"No se pudo cargar la foto: {ex.Message}", "Aceptar");
+        }
+    }
+
+    // quitar la foto elegida
+    private void RemovePhoto_Tapped(object? sender, TappedEventArgs e)
+    {
+        ClearPhoto();
+        UpdatePublishState();
     }
 
     // guardar la publicación
@@ -46,10 +103,11 @@ public partial class CreatePostPage : ContentPage
     {
         try
         {
-            var text = ContentEditor.Text?.Trim();
+            var text = ContentEditor.Text?.Trim() ?? string.Empty;
 
-            if (string.IsNullOrEmpty(text))
+            if (text.Length == 0 && selectedImagePath is null)
             {
+                await DisplayAlert("Error", "Escribe algo o agrega una foto.", "Aceptar");
                 return;
             }
 
@@ -58,11 +116,16 @@ public partial class CreatePostPage : ContentPage
                 return;
             }
 
+            // el siguiente id libre (las publicaciones de ejemplo ya usan del 1 al 5)
+            var nextId = db.Posts.Any() ? db.Posts.Max(p => p.Id) + 1 : 1;
+
             db.Posts.Add(new Post
             {
+                Id = nextId,
                 UserId = current.Id,
                 Username = current.Username,
                 Content = text,
+                ImagePath = selectedImagePath,
                 Date = DateTime.Now,
                 Likes = 0
             });
@@ -72,7 +135,7 @@ public partial class CreatePostPage : ContentPage
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Error", ex.Message, "Aceptar");
+            await DisplayAlert("Error", ex.ToString(), "Aceptar");
         }
     }
 

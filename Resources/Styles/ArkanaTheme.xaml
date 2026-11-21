@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    x:Class="Arkana.Resources.Styles.ArkanaTheme">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <!-- ============ PALETA ============ -->
     <Color x:Key="ArkBackground">#0A0A0F</Color>
@@ -135,6 +134,30 @@
             <DataTrigger TargetType="Button" Binding="{Binding IsFollowing}" Value="True">
                 <Setter Property="BackgroundColor" Value="{StaticResource ArkSurface}"/>
                 <Setter Property="TextColor" Value="{StaticResource ArkTextMuted}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- ============ ÍCONOS ============ -->
+    <Style x:Key="IconLabel" TargetType="Label">
+        <Setter Property="FontFamily" Value="MaterialIcons"/>
+        <Setter Property="FontSize" Value="24"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextPrimary}"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="FieldIcon" TargetType="Label" BasedOn="{StaticResource IconLabel}">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="TextColor" Value="{StaticResource ArkTextMuted}"/>
+    </Style>
+
+    <!-- corazón: gris normal, rojo cuando le diste me gusta -->
+    <Style x:Key="LikeIcon" TargetType="Label" BasedOn="{StaticResource IconLabel}">
+        <Setter Property="TextColor" Value="{StaticResource ArkTextMuted}"/>
+        <Style.Triggers>
+            <DataTrigger TargetType="Label" Binding="{Binding Liked}" Value="True">
+                <Setter Property="TextColor" Value="{StaticResource ArkAccent}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>

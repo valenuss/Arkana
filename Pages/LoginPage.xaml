@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Arkana.Controls"
+    xmlns:helpers="clr-namespace:Arkana.Helpers"
     x:Class="Arkana.Pages.LoginPage"
     BackgroundColor="{StaticResource ArkBackground}">
 
@@ -30,7 +31,7 @@
                         <!-- correo o usuario -->
                         <Border Style="{StaticResource FieldBox}">
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
-                                <Label Text="👤" FontSize="18" VerticalOptions="Center"/>
+                                <Label Text="{x:Static helpers:Icons.Person}" Style="{StaticResource FieldIcon}"/>
                                 <Entry Grid.Column="1" x:Name="EmailEntry"
                                        Placeholder="Correo electrónico o usuario"
                                        Style="{StaticResource FieldEntry}"/>
@@ -40,12 +41,12 @@
                         <!-- contraseña con ojito -->
                         <Border Style="{StaticResource FieldBox}">
                             <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
-                                <Label Text="🔒" FontSize="18" VerticalOptions="Center"/>
+                                <Label Text="{x:Static helpers:Icons.Lock}" Style="{StaticResource FieldIcon}"/>
                                 <Entry Grid.Column="1" x:Name="PasswordEntry"
                                        Placeholder="Contraseña" IsPassword="True"
                                        Style="{StaticResource FieldEntry}"/>
-                                <Label Grid.Column="2" Text="👁" FontSize="18" VerticalOptions="Center"
-                                       AutomationProperties.Name="Mostrar u ocultar contraseña">
+                                <Label Grid.Column="2" x:Name="EyeIcon" Text="{x:Static helpers:Icons.Visibility}" Style="{StaticResource FieldIcon}"
+                                      AutomationProperties.Name="Mostrar u ocultar contraseña">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="ShowPassword_Tapped"/>
                                     </Label.GestureRecognizers>

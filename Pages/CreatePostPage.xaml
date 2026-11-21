@@ -3,18 +3,19 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Arkana.Controls"
+    xmlns:helpers="clr-namespace:Arkana.Helpers"
     x:Class="Arkana.Pages.CreatePostPage"
     Shell.NavBarIsVisible="False"
     Shell.TabBarIsVisible="False"
     BackgroundColor="{StaticResource ArkBackground}">
 
-    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="18">
+    <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" Padding="18">
 
         <!-- barra de arriba -->
         <Grid Grid.Row="0" ColumnDefinitions="48,*,48" Padding="0,5,0,15">
 
-            <Label Text="✕" FontSize="22" TextColor="{StaticResource ArkTextPrimary}"
-                   VerticalOptions="Center" AutomationProperties.Name="Cerrar">
+            <Label Text="{x:Static helpers:Icons.Close}" Style="{StaticResource IconLabel}"
+                   AutomationProperties.Name="Cerrar">
                 <Label.GestureRecognizers>
                     <TapGestureRecognizer Tapped="Close_Tapped"/>
                 </Label.GestureRecognizers>
@@ -50,11 +51,41 @@
                 TextChanged="ContentEditor_TextChanged"
                 Margin="0,15,0,0"/>
 
-        <!-- contador y botón -->
-        <VerticalStackLayout Grid.Row="3" Spacing="10">
+        <!-- vista previa de la foto -->
+        <Grid Grid.Row="3" x:Name="PreviewContainer" IsVisible="False" Margin="0,10,0,0">
+            <Border StrokeShape="RoundRectangle 14" StrokeThickness="0" HeightRequest="200">
+                <Image x:Name="PreviewImage" Aspect="AspectFill"/>
+            </Border>
 
-            <Label x:Name="CounterLabel" Text="0 / 280" Style="{StaticResource Caption}"
-                   HorizontalOptions="End"/>
+            <!-- quitar foto -->
+            <Border StrokeShape="RoundRectangle 16" BackgroundColor="#99000000" StrokeThickness="0"
+                    WidthRequest="32" HeightRequest="32"
+                    HorizontalOptions="End" VerticalOptions="Start" Margin="8">
+                <Label Text="{x:Static helpers:Icons.Close}" Style="{StaticResource IconLabel}"
+                       FontSize="18" HorizontalOptions="Center"
+                       AutomationProperties.Name="Quitar foto"/>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="RemovePhoto_Tapped"/>
+                </Border.GestureRecognizers>
+            </Border>
+        </Grid>
+
+        <!-- foto, contador y botón -->
+        <VerticalStackLayout Grid.Row="4" Spacing="10" Margin="0,10,0,0">
+
+            <Grid ColumnDefinitions="Auto,*">
+                <Label Text="{x:Static helpers:Icons.AddPhoto}" Style="{StaticResource IconLabel}"
+                       TextColor="{StaticResource ArkAccent}"
+                       AutomationProperties.Name="Agregar foto">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="PickPhoto_Tapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <Label Grid.Column="1" x:Name="CounterLabel" Text="0 / 280"
+                       Style="{StaticResource Caption}"
+                       HorizontalOptions="End" VerticalOptions="Center"/>
+            </Grid>
 
             <Button x:Name="PublishButton" Text="Publicar" Style="{StaticResource PrimaryButton}"
                     IsEnabled="False" Clicked="Publish_Clicked"/>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:helpers="clr-namespace:Arkana.Helpers"
+    x:Class="Arkana.Pages.NotificationsPage"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False"
+    BackgroundColor="{StaticResource ArkBackground}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- barra de arriba -->
+        <Grid Grid.Row="0" ColumnDefinitions="48,*,48" Padding="18,12">
+
+            <Label Text="{x:Static helpers:Icons.ArrowBack}" Style="{StaticResource IconLabel}"
+                   AutomationProperties.Name="Volver">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Back_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Label Grid.Column="1" Text="Notificaciones" Style="{StaticResource Heading}"
+                   FontSize="18" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+        </Grid>
+
+        <!-- lista de notificaciones -->
+        <CollectionView Grid.Row="1" x:Name="NotificationsList" SelectionMode="None">
+
+            <CollectionView.EmptyView>
+                <Label Text="No tienes notificaciones" Style="{StaticResource Subheading}"
+                       HorizontalOptions="Center" Margin="0,40"/>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" Padding="18,10">
+
+                        <Border StrokeShape="RoundRectangle 20" StrokeThickness="0"
+                                BackgroundColor="{StaticResource ArkSurfaceRaised}"
+                                WidthRequest="40" HeightRequest="40" VerticalOptions="Start">
+                            <Label Text="{Binding Icon}" Style="{StaticResource IconLabel}"
+                                   FontSize="20" TextColor="{StaticResource ArkAccent}"
+                                   HorizontalOptions="Center"/>
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="{Binding Message}" Style="{StaticResource Body}" FontSize="14"/>
+                            <Label Text="{Binding TimeAgo}" Style="{StaticResource Caption}" FontSize="11"/>
+                        </VerticalStackLayout>
+
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>

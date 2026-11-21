@@ -6,10 +6,9 @@
     xmlns:controls="clr-namespace:Arkana.Controls"
     xmlns:pages="clr-namespace:Arkana.Pages"
     xmlns:info="clr-namespace:Microsoft.Maui.ApplicationModel;assembly=Microsoft.Maui.Essentials"
-    Title="Arkana"
+     Title="Arkana"
     FlyoutBehavior="Flyout"
     FlyoutBackgroundColor="{StaticResource ArkSurface}"
-    BackgroundColor="{StaticResource ArkBackground}"
     Shell.BackgroundColor="{StaticResource ArkBackground}"
     Shell.ForegroundColor="{StaticResource ArkTextPrimary}"
     Shell.TitleColor="{StaticResource ArkTextPrimary}"
@@ -60,9 +59,9 @@
             ContentTemplate="{DataTemplate pages:HomePage}"
             Shell.NavBarIsVisible="False"/>
 
-        <ShellContent
-            Title="🔍 Buscar"
-            ContentTemplate="{DataTemplate pages:SearchPage}"/>
+        <ShellContent Title="🔍 Buscar"
+              Route="search"
+              ContentTemplate="{DataTemplate pages:SearchPage}"/>
 
         <ShellContent
             Title="👤 Perfil"

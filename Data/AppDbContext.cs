@@ -49,9 +49,8 @@ public class AppDbContext : DbContext
         );
 
         modelBuilder.Entity<Comment>().HasData(
-            new Comment { Id = 1, PostId = 1, UserId = 2, Username = "sebas", Content = "Qué belleza, se ve increíble ✨", Date = new DateTime(2026, 10, 1, 21, 30, 0) },
-            new Comment { Id = 2, PostId = 1, UserId = 3, Username = "vale", Content = "Hoy se ven todas las estrellas", Date = new DateTime(2026, 10, 1, 22, 10, 0) },
-            new Comment { Id = 3, PostId = 3, UserId = 1, Username = "luna", Content = "¡Quiero escucharte tocar!", Date = new DateTime(2026, 10, 3, 19, 0, 0) }
+            new Comment { Id = 1, PostId = 1, UserId = 2, Username = "sebas", Text = "¡Qué hermosa noche!", Date = new DateTime(2026, 10, 1, 22, 0, 0) },
+            new Comment { Id = 2, PostId = 1, UserId = 3, Username = "vale", Text = "Preciosa ✨", Date = new DateTime(2026, 10, 1, 22, 30, 0) }
         );
     }
 }

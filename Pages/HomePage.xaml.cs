@@ -41,7 +41,7 @@ public partial class HomePage : ContentPage
         // publicaciones: las más nuevas primero
         PostsList.ItemsSource = db.Posts
             .OrderByDescending(p => p.Date)
-            .AsEnumerable()
+            .ToList()
             .Select(p => new PostItem
             {
                 Id = p.Id,
@@ -49,16 +49,18 @@ public partial class HomePage : ContentPage
                 Initial = p.Username.ToInitial(),
                 TimeAgo = p.Date.ToTimeAgo(),
                 Content = p.Content,
+                Photo = string.IsNullOrEmpty(p.ImagePath) ? null : ImageSource.FromFile(p.ImagePath),
+                CommentsCount = db.Comments.Count(c => c.PostId == p.Id),
                 Likes = p.Likes,
                 Liked = LikeTracker.IsLiked(p.Id)
             })
             .ToList();
     }
 
-    // dar y quitar me gusta
-    private void Like_Tapped(object? sender, TappedEventArgs e)
+    // dar y quitar me gusta (con animación de latido)
+    private async void Like_Tapped(object? sender, TappedEventArgs e)
     {
-        if (sender is not Label { BindingContext: PostItem item })
+        if (sender is not Label { BindingContext: PostItem item } heart)
         {
             return;
         }
@@ -70,46 +72,54 @@ public partial class HomePage : ContentPage
         // guardar el nuevo número en la base de datos
         var post = db.Posts.Find(item.Id);
 
-        if (post is null)
+        if (post is not null)
+        {
+            post.Likes = item.Likes;
+            db.SaveChanges();
+        }
+
+        // latido: crece y vuelve a su tamaño
+        await heart.ScaleTo(1.4, 100, Easing.CubicOut);
+        await heart.ScaleTo(1.0, 100, Easing.CubicIn);
+    }
+
+    // abrir la pantalla de publicar
+    private async void NewPost_Tapped(object? sender, TappedEventArgs e) =>
+        await Shell.Current.GoToAsync(Routes.CreatePost);
+
+    // la lupa del encabezado abre la pestaña Buscar
+    private async void Search_Tapped(object? sender, TappedEventArgs e) =>
+        await Shell.Current.GoToAsync("//main/search");
+
+    // cerrar sesión y volver al login
+    private async void Logout_Tapped(object? sender, TappedEventArgs e) =>
+        await AuthNavigation.SignOutAsync();
+
+    // abrir los comentarios de una publicación
+    private async void Comments_Tapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is HorizontalStackLayout { BindingContext: PostItem item })
+        {
+            await Shell.Current.GoToAsync($"{Routes.Comments}?postId={item.Id}");
+        }
+    }
+
+    // la campanita abre las notificaciones
+    private async void Bell_Tapped(object? sender, TappedEventArgs e) =>
+        await Shell.Current.GoToAsync(Routes.Notifications);
+
+    // compartir una publicación con el menú del sistema
+    private async void Share_Tapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is not Label { BindingContext: PostItem item })
         {
             return;
         }
 
-        post.Likes = item.Likes;
-        db.SaveChanges();
-    }
-
-
-// datos de cada historia
-public record StoryItem(string Username, string Initial);
-
-
-// datos de cada publicación tal como se muestra en pantalla
-public class PostItem : BindingUtilObject
-{
-    public int Id { get; init; }
-    public string Username { get; init; } = "";
-    public string Initial { get; init; } = "?";
-    public string TimeAgo { get; init; } = "";
-    public string Content { get; init; } = "";
-
-    int _likes;
-    public int Likes
-    {
-        get => _likes;
-        set => SetProperty(ref _likes, value);
-    }
-
-    bool _liked;
-    public bool Liked
-    {
-        get => _liked;
-        set
+        await Share.Default.RequestAsync(new ShareTextRequest
         {
-            if (SetProperty(ref _liked, value))
-            {
-                RaisePropertyChanged(nameof(Heart));
-            }
-        }
-    }
+            Title = "Compartir publicación",
+            Text = $"@{item.Username} en Arkana: {item.Content}"
+        });
+    } 
 }

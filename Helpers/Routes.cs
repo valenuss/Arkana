@@ -7,4 +7,6 @@ public static class Routes
     public const string Register = "register";
     public const string CreatePost = "createpost";
     public const string UserProfile = "userprofile";
+    public const string Comments = "comments";
+    public const string Notifications = "notifications";
 }
