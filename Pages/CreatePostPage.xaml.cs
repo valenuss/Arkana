@@ -37,7 +37,6 @@ public partial class CreatePostPage : ContentPage
     private void ContentEditor_TextChanged(object? sender, TextChangedEventArgs e)
     {
         var length = e.NewTextValue?.Length ?? 0;
-
         CounterLabel.Text = $"{length} / {MaxLength}";
         PublishButton.IsEnabled = !string.IsNullOrWhiteSpace(e.NewTextValue);
     }
@@ -51,7 +50,6 @@ public partial class CreatePostPage : ContentPage
 
             if (string.IsNullOrEmpty(text))
             {
-                await DisplayAlert("Error", "Escribe algo antes de publicar.", "Aceptar");
                 return;
             }
 
@@ -70,7 +68,6 @@ public partial class CreatePostPage : ContentPage
             });
             db.SaveChanges();
 
-            // volver al inicio
             await Shell.Current.GoToAsync("..");
         }
         catch (Exception ex)

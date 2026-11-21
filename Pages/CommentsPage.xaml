@@ -7,8 +7,6 @@
     Shell.TabBarIsVisible="False"
     BackgroundColor="#12040A">
 
-    <Grid>
-
         <!-- fondo con capa oscura para que todo se lea bien -->
         <Image Source="descarga.png" Aspect="AspectFill" InputTransparent="True"
                HorizontalOptions="Fill" VerticalOptions="Fill"/>

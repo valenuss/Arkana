@@ -79,15 +79,6 @@ public partial class HomePage : ContentPage
         db.SaveChanges();
     }
 
-    // abrir la pantalla de publicar
-    private async void NewPost_Tapped(object? sender, TappedEventArgs e) =>
-        await Shell.Current.GoToAsync(Routes.CreatePost);
-
-    // cerrar sesión y volver al login
-    private async void Logout_Tapped(object? sender, TappedEventArgs e) =>
-        await AuthNavigation.SignOutAsync();
-}
-
 
 // datos de cada historia
 public record StoryItem(string Username, string Initial);
@@ -121,7 +112,4 @@ public class PostItem : BindingUtilObject
             }
         }
     }
-
-    // el corazón cambia según si ya le diste me gusta
-    public string Heart => Liked ? "❤️" : "🤍";
 }

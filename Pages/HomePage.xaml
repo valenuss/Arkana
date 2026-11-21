@@ -118,14 +118,13 @@
                             <HorizontalStackLayout Spacing="22">
 
                                 <HorizontalStackLayout Spacing="6">
-                                    <Label Text="{Binding Heart}" FontSize="22" VerticalOptions="Center"
-                                           AutomationProperties.Name="Me gusta">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="Like_Tapped"/>
-                                        </Label.GestureRecognizers>
-                                    </Label>
-                                    <Label Text="{Binding Likes}" FontSize="13" VerticalOptions="Center"
-                                           TextColor="{StaticResource ArkTextSecondary}"/>
+                                    <Label Text="{x:Static helpers:Icons.ChatBubbleOutline}" Style="{StaticResource IconLabel}"
+                                            FontSize="22" TextColor="{StaticResource ArkTextMuted}"/>
+                                    <Label Text="{Binding CommentsCount}" FontSize="13" VerticalOptions="Center"
+                                            TextColor="{StaticResource ArkTextSecondary}"/>
+                                    <HorizontalStackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="Comments_Tapped"/>
+                                    </HorizontalStackLayout.GestureRecognizers>
                                 </HorizontalStackLayout>
 
                                 <Label Text="💬" FontSize="20" VerticalOptions="Center"/>
