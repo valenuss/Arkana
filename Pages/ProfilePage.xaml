@@ -32,9 +32,6 @@
                         <Label Text="Seguidores" Style="{StaticResource StatCaption}"/>
                     </VerticalStackLayout>
 
-                    <VerticalStackLayout Grid.Column="2" Spacing="2">
-                        <Label x:Name="FollowingLabel" Text="0" Style="{StaticResource StatValue}"/>
-                        <Label Text="Siguiendo" Style="{StaticResource StatCaption}"/>
                     </VerticalStackLayout>
 
                 </Grid>

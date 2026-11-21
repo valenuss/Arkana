@@ -1,14 +1,10 @@
 ﻿using Arkana.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Arkana.Data;
 
 public class AppDbContext : DbContext
 {
-    // todos los contextos comparten la misma base en memoria
-    static readonly InMemoryDatabaseRoot root = new InMemoryDatabaseRoot();
-
     public DbSet<User> Users { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<Follow> Follows { get; set; }

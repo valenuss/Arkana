@@ -1,5 +1,3 @@
-using Arkana.Data;
-using Arkana.Helpers;
 using Arkana.Services;
 
 namespace Arkana.Pages;

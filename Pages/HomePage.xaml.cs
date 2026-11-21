@@ -104,10 +104,6 @@ public partial class HomePage : ContentPage
         }
     }
 
-    // la campanita abre las notificaciones
-    private async void Bell_Tapped(object? sender, TappedEventArgs e) =>
-        await Shell.Current.GoToAsync(Routes.Notifications);
-
     // compartir una publicación con el menú del sistema
     private async void Share_Tapped(object? sender, TappedEventArgs e)
     {
