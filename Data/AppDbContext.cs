@@ -9,6 +9,9 @@ public class AppDbContext : DbContext
     public DbSet<Post> Posts { get; set; }
     public DbSet<Follow> Follows { get; set; }
     public DbSet<Comment> Comments { get; set; }
+    public DbSet<Story> Stories { get; set; }
+    public DbSet<StoryLike> StoryLikes { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
 
     // ruta del archivo de la base de datos (queda guardado en el dispositivo)
     public static string DbPath =>
@@ -17,7 +20,21 @@ public class AppDbContext : DbContext
     public AppDbContext()
     {
         // crea el archivo y las tablas la primera vez; los datos de ejemplo se insertan una sola vez
-        Database.EnsureCreated();
+        Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS ""StoryLikes"" (
+            ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_StoryLikes"" PRIMARY KEY AUTOINCREMENT,
+            ""StoryId"" INTEGER NOT NULL,
+            ""UserId"" INTEGER NOT NULL
+        );");
+
+        Database.ExecuteSqlRaw(@"CREATE TABLE IF NOT EXISTS ""ChatMessages"" (
+            ""Id"" INTEGER NOT NULL CONSTRAINT ""PK_ChatMessages"" PRIMARY KEY AUTOINCREMENT,
+            ""SenderId"" INTEGER NOT NULL,
+            ""ReceiverId"" INTEGER NOT NULL,
+            ""Text"" TEXT NOT NULL,
+            ""Date"" TEXT NOT NULL,
+            ""IsStoryReply"" INTEGER NOT NULL
+        );");
+
         System.Diagnostics.Debug.WriteLine($"=== BD: {DbPath}");
     }
 

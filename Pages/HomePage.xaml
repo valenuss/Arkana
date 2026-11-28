@@ -27,13 +27,13 @@
                 <Label Text="{x:Static helpers:Icons.Notifications}" Style="{StaticResource IconLabel}"/>
 
                 <Border x:Name="BellBadge" IsVisible="False"
-            BackgroundColor="{StaticResource ArkAccent}" StrokeThickness="0"
-            StrokeShape="RoundRectangle 9"
-            MinimumWidthRequest="18" HeightRequest="18" Padding="4,0"
-            HorizontalOptions="End" VerticalOptions="Start" Margin="0,-4,-6,0">
+                        BackgroundColor="{StaticResource ArkAccent}" StrokeThickness="0"
+                        StrokeShape="RoundRectangle 9"
+                        MinimumWidthRequest="18" HeightRequest="18" Padding="4,0"
+                        HorizontalOptions="End" VerticalOptions="Start" Margin="0,-4,-6,0">
                     <Label x:Name="BellBadgeLabel" Text="0" FontSize="10" FontAttributes="Bold"
-               TextColor="{StaticResource ArkTextPrimary}"
-               HorizontalOptions="Center" VerticalOptions="Center"/>
+                           TextColor="{StaticResource ArkTextPrimary}"
+                           HorizontalOptions="Center" VerticalOptions="Center"/>
                 </Border>
 
                 <Grid.GestureRecognizers>
@@ -62,10 +62,15 @@
                     <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                         <HorizontalStackLayout Padding="18,5,18,10" Spacing="14">
 
-                            <!-- tu historia -->
+                            <!-- tu historia: tocar la foto la abre, tocar el + agrega otra -->
                             <VerticalStackLayout Spacing="5" WidthRequest="68">
                                 <Grid WidthRequest="64" HeightRequest="64">
-                                    <controls:Avatar x:Name="StoryAvatar" Diameter="64"/>
+                                    <controls:Avatar x:Name="StoryAvatar" Diameter="64">
+                                        <controls:Avatar.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="MyStory_Tapped"/>
+                                        </controls:Avatar.GestureRecognizers>
+                                    </controls:Avatar>
+
                                     <Border StrokeShape="RoundRectangle 10" BackgroundColor="{StaticResource ArkAccent}"
                                             Stroke="{StaticResource ArkBackground}" StrokeThickness="2"
                                             WidthRequest="20" HeightRequest="20"
@@ -73,18 +78,24 @@
                                         <Label Text="+" TextColor="{StaticResource ArkTextPrimary}" FontSize="13"
                                                FontAttributes="Bold"
                                                HorizontalOptions="Center" VerticalOptions="Center"/>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="AddStory_Tapped"/>
+                                        </Border.GestureRecognizers>
                                     </Border>
                                 </Grid>
                                 <Label Text="Tu historia" Style="{StaticResource StoryName}"/>
                             </VerticalStackLayout>
 
-                            <!-- historias de los demás usuarios -->
+                            <!-- historias de la gente que sigues -->
                             <HorizontalStackLayout x:Name="StoriesLayout" Spacing="14">
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
                                         <VerticalStackLayout Spacing="5" WidthRequest="68">
                                             <controls:Avatar Diameter="64" Initial="{Binding Initial}"/>
                                             <Label Text="{Binding Username}" Style="{StaticResource StoryName}"/>
+                                            <VerticalStackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="Story_Tapped"/>
+                                            </VerticalStackLayout.GestureRecognizers>
                                         </VerticalStackLayout>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
@@ -130,9 +141,15 @@
                                     <Label Text="{Binding TimeAgo}" Style="{StaticResource Caption}" FontSize="11"/>
                                 </VerticalStackLayout>
 
+                                <!-- los 3 puntos: editar o eliminar -->
                                 <Label Grid.Column="2" Text="{x:Static helpers:Icons.MoreVert}"
                                        Style="{StaticResource IconLabel}"
-                                       FontSize="22" TextColor="{StaticResource ArkTextMuted}"/>
+                                       FontSize="22" TextColor="{StaticResource ArkTextMuted}"
+                                       AutomationProperties.Name="Opciones de la publicación">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="More_Tapped"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
 
                             </Grid>
 
@@ -174,9 +191,9 @@
 
                                 <!-- compartir -->
                                 <Label Text="{x:Static helpers:Icons.Share}"
-                                            Style="{StaticResource IconLabel}"
-                                            FontSize="22" TextColor="{StaticResource ArkTextMuted}"
-                                            AutomationProperties.Name="Compartir">
+                                       Style="{StaticResource IconLabel}"
+                                       FontSize="22" TextColor="{StaticResource ArkTextMuted}"
+                                       AutomationProperties.Name="Compartir">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="Share_Tapped"/>
                                     </Label.GestureRecognizers>

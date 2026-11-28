@@ -18,6 +18,8 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(Routes.UserProfile, typeof(UserProfilePage));
         Routing.RegisterRoute(Routes.Comments, typeof(CommentsPage));
         Routing.RegisterRoute(Routes.Notifications, typeof(NotificationsPage));
+        Routing.RegisterRoute(Routes.StoryViewer, typeof(StoryViewerPage));
+        Routing.RegisterRoute(Routes.Chat, typeof(ChatPage));
     }
 
     private async void About_Clicked(object? sender, EventArgs e)

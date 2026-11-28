@@ -24,6 +24,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<AppDbContext>();
         builder.Services.AddSingleton<FollowService>();
         builder.Services.AddSingleton<NotificationService>();
+        builder.Services.AddSingleton<StoryService>();
+        builder.Services.AddSingleton<ChatService>();
+        builder.Services.AddTransient<ChatPage>();
 
         // páginas (reciben sus dependencias en el constructor)
         builder.Services.AddTransient<LoginPage>();
@@ -35,6 +38,9 @@ public static class MauiProgram
         builder.Services.AddTransient<UserProfilePage>();
         builder.Services.AddTransient<CommentsPage>();
         builder.Services.AddTransient<NotificationsPage>();
+        builder.Services.AddTransient<StoryViewerPage>();
+        builder.Services.AddSingleton<ChatService>();
+        builder.Services.AddTransient<ChatPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

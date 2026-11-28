@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Arkana.Controls"
+    xmlns:helpers="clr-namespace:Arkana.Helpers"
+    x:Class="Arkana.Pages.StoryViewerPage"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="Black">
+
+    <Grid>
+
+        <!-- la foto (tocar para pasar a la siguiente) -->
+        <Image x:Name="StoryImage" Aspect="AspectFit">
+            <Image.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Next_Tapped"/>
+            </Image.GestureRecognizers>
+        </Image>
+
+        <!-- barra de arriba -->
+        <Grid VerticalOptions="Start" BackgroundColor="#99000000"
+              ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="12" Padding="16,14">
+
+            <controls:Avatar x:Name="OwnerAvatar" Diameter="40"/>
+
+            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                <Label x:Name="NameLabel" TextColor="White" FontAttributes="Bold" FontSize="15"/>
+                <Label x:Name="TimeLabel" TextColor="#B0B0B8" FontSize="11"/>
+            </VerticalStackLayout>
+
+            <Label Grid.Column="2" x:Name="CounterLabel" TextColor="#B0B0B8" FontSize="12"
+                   VerticalOptions="Center"/>
+
+            <!-- eliminar (solo si la historia es mía) -->
+            <Label Grid.Column="3" x:Name="DeleteIcon" Text="{x:Static helpers:Icons.Delete}"
+                   Style="{StaticResource IconLabel}" TextColor="White" IsVisible="False"
+                   AutomationProperties.Name="Eliminar historia">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Delete_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Label Grid.Column="4" Text="{x:Static helpers:Icons.Close}"
+                   Style="{StaticResource IconLabel}" TextColor="White"
+                   AutomationProperties.Name="Cerrar">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Close_Tapped"/>
+                </Label.GestureRecognizers>
+            </Label>
+
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

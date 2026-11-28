@@ -61,4 +61,5 @@ public partial class ProfilePage : ContentPage
 public record ProfilePostItem(string Content, string DateText, int Likes, ImageSource? Photo)
 {
     public bool HasImage => Photo is not null;
+    public bool IsTextOnly => Photo is null;
 }

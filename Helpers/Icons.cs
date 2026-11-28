@@ -24,4 +24,5 @@ public static class Icons
     public const string Send = "\ue163";
     public const string AddPhoto = "\ue43e";
     public const string PersonAdd = "\ue7fe";
+    public const string Delete = "\ue872";
 }
